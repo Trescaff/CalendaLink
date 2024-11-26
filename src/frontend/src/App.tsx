@@ -8,6 +8,17 @@ import PersonalProfile from "./HomeNav/PersonalProfile";
 import CombinedCalendar from "./HomeComponents/CombinedCalendar";
 import Setting from "./HomeNav/Setting";
 import About from "./BottomNavBar/About";
+import axios from "axios";
+
+
+
+try{
+  const response = await axios.get('http://localhost:5000/');
+  console.log(response.data);
+} catch (error) {
+  console.error(error);
+}
+
 
 function App() {
   return (
