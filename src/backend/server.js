@@ -22,8 +22,8 @@ const users = [
 
 app.post('/login', async (req, res) => {
   const { username, password } = req.body;
-  //const user = users.find(u => u.username === username && u.password === password);
-  const user = await User.findOne({username, password});
+  const user = users.find(u => u.username === username && u.password === password);
+  //const user = await User.findOne({username, password});
 
   if (user) {
     res.status(200).send({ message: 'Login successful' });
