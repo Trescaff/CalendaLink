@@ -1,25 +1,39 @@
 const express = require('express');
-const cors = require('cors'); //new
-const bodyParser = require('body-parser'); //new
+const bodyParser = require('body-parser');
+const cors = require('cors');
+const User = require('./models/userModel');
 
 const app = express();
 const port = 5000;
 
-// Middleware part new
-app.use(cors());
 app.use(bodyParser.json());
+app.use(cors());
 
-app.get('/', (req, res) => {
-  res.send('Hello World!');
+mongoose.connect('mongodb+srv://faizchan23:OqWnwzVYKtEkN1ws@calendalink.ph2sv.mongodb.net/?retryWrites=true&w=majority&appName=calendalink', {
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
+  useCreateIndex: true,
 });
 
-// Sample API Route new
-app.get('/api', (req, res) => {
-  res.json({ message: 'Backend connected successfully!' });
+const users = [
+  { username: 'admin', password: '1234' },
+  { username: 'admin1', password: '1234' }
+];
+
+app.post('/login', async (req, res) => {
+  const { username, password } = req.body;
+  //const user = users.find(u => u.username === username && u.password === password);
+  const user = await User.findOne({username, password});
+
+  if (user) {
+    res.status(200).send({ message: 'Login successful' });
+  } else {
+    res.status(401).send({ message: 'Invalid credentials' });
+  }
 });
 
 app.listen(port, () => {
-  console.log(`Server is running on http://localhost:${port}`);
+  console.log(`Server running on http://localhost:${port}`);
 });
 
 //test pull
