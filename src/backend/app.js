@@ -1,11 +1,23 @@
 const express = require('express');
+const bodyParser = require('body-parser');
+const cors = require('cors');
+const mongoose = require('mongoose');
+const authRoutes = require('./routes/authRoutes');
+
 const app = express();
-const port = process.env.PORT || 5000;
 
-app.get('/', (req, res) => {
-  res.send('Hello World!');
-});
+// Middleware
+app.use(bodyParser.json());
+app.use(cors());
 
-app.listen(port, () => {
-  console.log(`Server is running on port ${port}`);
-});
+// Database connection
+// mongoose.connect('mongodb+srv://faizchan23:OqWnwzVYKtEkN1ws@calendalink.ph2sv.mongodb.net/?retryWrites=true&w=majority&appName=calendalink', {
+//   useNewUrlParser: true,
+//   useUnifiedTopology: true,
+//   useCreateIndex: true,
+// });
+
+// Routes
+app.use('/auth', authRoutes);
+
+module.exports = app;

@@ -8,6 +8,16 @@ import PersonalProfile from "./HomeNav/PersonalProfile";
 import CombinedCalendar from "./HomeComponents/CombinedCalendar";
 import Setting from "./HomeNav/Setting";
 import About from "./BottomNavBar/About";
+import axios from "axios";
+import UserCard from "./components/UserCard";
+
+try{
+  const response = await axios.get('http://localhost:5000/');
+  console.log(response.data);
+} catch (error) {
+  console.error(error);
+}
+
 
 function App() {
   return (
@@ -22,7 +32,7 @@ function App() {
         <Route path="CombinedCalendar" element={<CombinedCalendar />}></Route>
         <Route path="Setting" element={<Setting />}></Route>
         <Route path="About" element={<About />}></Route>
-      </Routes>
+        <Route path="UserCard" element={<UserCard />} /></Routes>
     </div>
   );
 }
