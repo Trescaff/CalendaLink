@@ -10,6 +10,7 @@
     background: rgba(0, 0, 0, 0.5); 
     z-index: 999;
   }
+  
   .user-card {
     background: white;
     width: 900px;
@@ -33,11 +34,11 @@
   }
   
   .user-card-image img {
-    width: 70%; /* Adjust as per your design */
-    height: auto; /* Maintains the aspect ratio */
-    border-radius: 0; /* Removes the round shape */
-    object-fit: cover; /* Ensures the image fits nicely */
-  
+    width: 200px;
+    height: auto;
+    border-radius: 0;
+    object-fit: cover;
+    max-height: 150px;
   }
   
   .user-name {
@@ -48,7 +49,7 @@
   }
   
   .user-role {
-    font-size: 1.0rem;
+    font-size: 1rem;
     color: #555;
     margin: 10px 0;
   }
@@ -56,27 +57,41 @@
   .team-list {
     display: flex;
     flex-wrap: wrap;
-    justify-content: space-between; /* Ensures equal spacing */
-    text-align: center;
-    list-style-type: none;
+    justify-content: space-evenly;
     padding: 0;
-    font-family: 'Georgia', serif; /* Elegant font */
+    list-style-type: none;
+    margin-top: 20px;
   }
   
-  .team-list li {
-    width: 30%; /* Adjust this value for spacing */
-    margin: 20px 0; /* Spacing between rows */
+  .team-member {
+    display: flex;
+    align-items: center;
+    text-align: left;
+    margin-bottom: 20px;
+    width: 40%; /* Adjust for layout */
   }
   
-  .team-list .member-name {
+  .team-member:nth-child(odd) {
+    margin-left: 150px; /* Moves odd-numbered members to the right */
+  }
+  
+  .member-picture {
+    width: 70px;
+    height: 70px;
+    margin-right: 10px;
+    border-radius: 50%;
+    object-fit: cover;
+  }
+  
+  .member-name {
     font-weight: bold;
     font-size: 1.2rem;
-    color: #78753c; /* Nice contrasting color */
+    color: #78753c;
   }
   
-  .team-list .member-id {
+  .member-id {
     font-size: 0.9rem;
-    color: #555; /* Subtle text color for ID */
+    color: #555;
   }
   
   .user-quote {
@@ -84,19 +99,17 @@
     color: #333;
     margin-top: 20px;
     font-size: 1.1rem;
-    font-weight: bold; /* Makes the text bold */
+    font-weight: bold;
     border-left: 4px solid #b6b5c9;
     padding-left: 10px;
   }
   
-  /* Top rectangular image */
+  Top rectangular image 
   .top-image img {
-    width: 100%;
+    width: 100px;
     height: auto;
     border-top-left-radius: 10px;
     border-top-right-radius: 10px;
     object-fit: cover;
-    max-height: 150px; /* Adjust height as needed */
+    max-height: 150px;
   }
-  
-  
