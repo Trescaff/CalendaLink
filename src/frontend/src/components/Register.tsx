@@ -1,4 +1,5 @@
 import { Link } from "react-router-dom";
+import axios from "axios";
 import React, { useState } from "react";
 
 function Register() {
@@ -12,28 +13,20 @@ function Register() {
     try {
       console.log("Submitting:", { username, password }); // Log the form data
 
-      const response = await fetch("http://192.168.1.135:5000/register", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ username, password }),
+      const response = await axios.post("http://localhost:5000/register", {
+        username,
+        password,
       });
 
       console.log("Response status:", response.status); // Log response status
 
-      const data = await response.json();
-
-      console.log("Response data:", data); // Log the response data
-
-      if (response.ok) {
-        setMessage(data.message); // Show success message
-      } else {
-        setMessage(data.message); // Show error message
-      }
+      setMessage(response.data.message);
     } catch (error) {
-      console.error("Error occurred during registration:", error); // Log the error
-      setMessage("An error occurred. Please try again later.");
+      if (axios.isAxiosError(error)) {
+        setMessage(error.response?.data.message || "An error occurred");
+      } else {
+        setMessage("An unexpected error occurred");
+      }
     }
   };
 

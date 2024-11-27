@@ -2,6 +2,7 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const cors = require('cors');
 const User = require('./models/userModel');
+const mongoose = require('mongoose');
 
 const app = express();
 const port = 5000;
@@ -9,16 +10,33 @@ const port = 5000;
 app.use(bodyParser.json());
 app.use(cors());
 
-mongoose.connect('mongodb+srv://faizchan23:OqWnwzVYKtEkN1ws@calendalink.ph2sv.mongodb.net/?retryWrites=true&w=majority&appName=calendalink', {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
-  useCreateIndex: true,
-});
+// mongoose.connect('mongodb+srv://faizchan23:OqWnwzVYKtEkN1ws@calendalink.ph2sv.mongodb.net/?retryWrites=true&w=majority&appName=calendalink', {
+//   useNewUrlParser: true,
+//   useUnifiedTopology: true,
+//   useCreateIndex: true,
+// });
 
 const users = [
   { username: 'admin', password: '1234' },
   { username: 'admin1', password: '1234' }
 ];
+
+app.post('/register', async (req, res) => {
+  const { username, password } = req.body;
+  try {
+    //const existingUser = await User.findOne({ username });
+    const existingUser = users.find(u => u.username === username && u.password === password);
+    if (existingUser) {
+      return res.status(400).send({message: 'Username already exists' });
+    }
+
+    const newUser = new User({ username, password });
+    await newUser.save();
+    res.status(201).send({ message: 'User registered successfully' });
+  } catch (error) {
+    res.status(500).send({ message: 'An error occurred' });
+  }
+});
 
 app.post('/login', async (req, res) => {
   const { username, password } = req.body;
