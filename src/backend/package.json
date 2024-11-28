@@ -1,50 +1,24 @@
-// {
-//   "name": "backend",
-//   "version": "1.0.0",
-//   "main": "server.js",
-//   "scripts": {
-//     "test": "echo \"Error: no test specified\" && exit 1",
-//     "start": "node server.js",
-//     "dev": "nodemon server.js"
-//   },
-//   "keywords": [],
-//   "author": "",
-//   "license": "ISC",
-//   "description": "",
-//   "dependencies": {
-//     "bcrypt": "^5.1.1",
-//     "body": "^5.1.0",
-//     "body-parser": "^1.20.3",
-//     "cors": "^2.8.5",
-//     "express": "^4.21.1",
-//     "mongoose": "^8.8.3",
-//     "nodemon": "^3.1.7",
-//     "parser": "^0.1.4",
-//     "serverless-http": "^3.2.0"
-//   }
-// }
-
 {
-  "name": "project",
+  "name": "backend",
   "version": "1.0.0",
   "main": "server.js",
   "scripts": {
-    "start": "node server.js"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js",
+    "dev": "nodemon server.js"
   },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
   "dependencies": {
-    "body-parser": "^1.20.0",
+    "bcrypt": "^5.1.1",
+    "body": "^5.1.0",
+    "body-parser": "^1.20.3",
     "cors": "^2.8.5",
-<<<<<<< HEAD
     "express": "^4.21.1",
     "mongoose": "^8.8.3",
+    "nodemon": "^3.1.7",
     "parser": "^0.1.4"
-  },
-  "devDependencies": {
-    "nodemon": "^3.1.7"
-=======
-    "express": "^4.18.2",
-    "mongoose": "^6.8.0"
->>>>>>> cf2d68670e1f9b06fc401573d92aa8654cf2f756
   }
 }
-
