@@ -1,5 +1,5 @@
 import React from "react";
-import "./components/UserCard.css";
+import "./UserCard.css";
 
 const UserCard: React.FC = () => {
   const members = [
