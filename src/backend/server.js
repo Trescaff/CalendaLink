@@ -23,7 +23,6 @@ mongoose.connect('mongodb+srv://faizchan23:OqWnwzVYKtEkN1ws@calendalink.ph2sv.mo
 ];*/
 
 //const mongoose = require('mongoose');
-
 const users = new mongoose.Schema({    //Syunis
   username: { type: String, required: true, unique: true },
   password: { type: String, required: true }, // Hashed password
@@ -53,11 +52,11 @@ const users = new mongoose.Schema({    //Syunis
   createdAt: { type: Date, default: Date.now }, // When the user was created
 });
 
-const User = mongoose.model('User', users);
+//const User = mongoose.model('User', users);
 
 module.exports = User;
 
-
+// POST: Login
 app.post('/login', async (req, res) => {
   const { username, password } = req.body;
   //Syunis 
@@ -73,6 +72,7 @@ app.post('/login', async (req, res) => {
 });
 
 //Syunis
+// POST: Register
 app.post('/register', async (req, res) => {
   try {
     const { username, password, email } = req.body;
@@ -93,6 +93,7 @@ app.post('/register', async (req, res) => {
   }
 });
 
+// POST: Add event to user's calendar
 app.post('/calendar/add', async (req, res) => {
   try {
     const { username, event } = req.body;
@@ -112,6 +113,7 @@ app.post('/calendar/add', async (req, res) => {
   }
 });
 
+// GET: Retrieve user's calendar
 app.get('/calendar/:username', async (req, res) => {
   try {
     const { username } = req.params;
@@ -127,6 +129,7 @@ app.get('/calendar/:username', async (req, res) => {
   }
 });
 
+// POST: Connect users
 app.post('/users/connect', async (req, res) => {
   try {
     const { username, connectTo } = req.body;
