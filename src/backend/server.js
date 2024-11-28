@@ -3,7 +3,7 @@ const bodyParser = require('body-parser');
 const cors = require('cors');
 const User = require('./models/userModel');
 
-const bcrypt = require('bcrypt');    //syunis - hashing dependency
+//const bcrypt = require('bcrypt');    //syunis - hashing dependency
 
 const app = express();
 const port = 5000;
@@ -60,14 +60,9 @@ module.exports = User;
 
 app.post('/login', async (req, res) => {
   const { username, password } = req.body;
-  //Syunis - chatgpt suruh tukar
-  const user = await User.findOne({ username });
-  if (user && await bcrypt.compare(password, user.password)) {
-  res.status(200).send({ message: 'Login successful' });
-} else {
-  res.status(401).send({ message: 'Invalid credentials' });
-}
-  //const user = users.find(u => u.username === username && u.password === password);
+  //Syunis 
+  //const user = await User.findOne({ username });    //untuk hash
+  const user = users.find(u => u.username === username && u.password === password);
   //const user = await User.findOne({username, password});
 
   if (user) {
@@ -87,10 +82,10 @@ app.post('/register', async (req, res) => {
     if (existingUser) return res.status(400).json({ message: 'Username already exists' });
 
     // Hash password
-    const hashedPassword = await bcrypt.hash(password, 10);
+    //const hashedPassword = await bcrypt.hash(password, 10);
 
     // Create user
-    const user = await User.create({ username, password: hashedPassword, email });
+    const user = await User.create({ username, password, email });
     res.status(201).json({ message: 'User registered successfully', user });
   } catch (error) {
     console.error(error);
