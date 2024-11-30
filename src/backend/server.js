@@ -1,4 +1,5 @@
 const express = require('express');
+const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const cors = require('cors');
 const User = require('./models/userModel');
@@ -14,55 +15,21 @@ app.use(cors());
 mongoose.connect('mongodb+srv://faizchan23:OqWnwzVYKtEkN1ws@calendalink.ph2sv.mongodb.net/?retryWrites=true&w=majority&appName=calendalink', {
   useNewUrlParser: true,
   useUnifiedTopology: true,
-  useCreateIndex: true,
 });
 
-/*const users = [
+const users = [
   { username: 'admin', password: '1234' },
   { username: 'admin1', password: '1234' }
-];*/
+];
 
-//const mongoose = require('mongoose');
-const users = new mongoose.Schema({    //Syunis
-  username: { type: String, required: true, unique: true },
-  password: { type: String, required: true }, // Hashed password
-  email: { type: String, required: true, unique: true },
-  phoneNumber: { type: String }, // Optional
-  fullName: { type: String }, // Optional
-  profilePictureURL: { type: String }, // Optional URL for profile picture
-  location: { type: String }, // Optional user location
-  calendar: [
-    {
-      title: { type: String, required: true }, // Event title
-      description: { type: String }, // Optional event description
-      startTime: { type: Date, required: true }, // Start time of the event
-      endTime: { type: Date, required: true }, // End time of the event
-      date: { type: Date, required: true }, // Event date
-      location: { type: String }, // Optional event location
-      category: { type: String }, // Event category (e.g., Work, Personal)
-      url: { type: String }, // Optional related URL (e.g., Zoom link)
-      notifications: {
-        repeat: { type: String, enum: ['Never', 'Daily', 'Weekly', 'Monthly'], default: 'Never' }, // Repeat setting
-        methods: { type: [String], enum: ['Email', 'Push', 'SMS'], default: ['Email'] }, // Notification methods
-      },
-      participants: [String], // List of connected users (usernames)
-    },
-  ],
-  connectedUsers: [{ type: String }], // List of connected usernames
-  createdAt: { type: Date, default: Date.now }, // When the user was created
-});
-
-//const User = mongoose.model('User', users);
-
-module.exports = User;
 
 // POST: Login
 app.post('/login', async (req, res) => {
   const { username, password } = req.body;
   //Syunis 
   //const user = await User.findOne({ username });    //untuk hash
-  const user = users.find(u => u.username === username && u.password === password);
-  //const user = await User.findOne({username, password});
+  //const user = users.find(u => u.username === username && u.password === password);
+  const user = await User.findOne({username, password});
 
   if (user) {
     res.status(200).send({ message: 'Login successful' });
@@ -75,7 +42,7 @@ app.post('/login', async (req, res) => {
 // POST: Register
 app.post('/register', async (req, res) => {
   try {
-    const { username, password, email } = req.body;
+    const { username, password } = req.body;
 
     // Check for existing user
     const existingUser = await User.findOne({ username });
@@ -85,7 +52,7 @@ app.post('/register', async (req, res) => {
     //const hashedPassword = await bcrypt.hash(password, 10);
 
     // Create user
-    const user = await User.create({ username, password, email });
+    const user = await User.create({ username, password });
     res.status(201).json({ message: 'User registered successfully', user });
   } catch (error) {
     console.error(error);
