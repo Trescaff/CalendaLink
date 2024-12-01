@@ -1,11 +1,14 @@
 import React, { useState } from "react";
+import axios from "axios";
 import "./EventPopupCSS.css";
 
 interface EventPopupProps {
   onClose: () => void;
+  onSaveSuccess: () => void; // Callback for success
+  username: string; // Add this prop
 }
 
-const EventPopup: React.FC<EventPopupProps> = ({ onClose }) => {
+const EventPopup: React.FC<EventPopupProps> = ({ onClose, onSaveSuccess }) => {
   const [title, setTitle] = useState("");
   const [startTime, setStartTime] = useState("");
   const [endTime, setEndTime] = useState("");
@@ -13,6 +16,46 @@ const EventPopup: React.FC<EventPopupProps> = ({ onClose }) => {
   const [category, setCategory] = useState("Me");
   const [location, setLocation] = useState("");
   const [date, setDate] = useState("");
+  const [loading, setLoading] = useState(false);
+
+  const handleSave = async () => {
+    const eventData = {
+      title,
+      startTime,
+      endTime,
+      description,
+      category,
+      location,
+      date,
+    };
+
+    try {
+      const response = await axios.post("http://localhost:5000/calendar/add", {
+        //username, // Use the dynamic username prop
+        event: eventData,
+      });
+
+      if (response.status === 201) {
+        console.log("Event added successfully:", response.data);
+        onSaveSuccess(); // Notify parent of success
+        onClose(); // Close the popup
+      } else {
+        console.error("Error adding event:", response.data.message);
+        alert("Failed to add event: " + response.data.message);
+      }
+    } catch (error: any) {
+      console.error("Error:", error);
+      if (error.response) {
+        // The request was made and the server responded with an error status
+        alert("An error occurred: " + error.response.data.message);
+      } else {
+        // The request was made but no response was received or another error occurred
+        alert("An error occurred while saving the event.");
+      }
+    } finally {
+      setLoading(false); // Stop loading
+    }
+  };
 
   return (
     <div className="event-popup">
@@ -97,7 +140,8 @@ const EventPopup: React.FC<EventPopupProps> = ({ onClose }) => {
         </button>
         <button
           className="save-button"
-          onClick={() => console.log("Save Event")}
+          onClick={handleSave}
+          //onClick={() => console.log("Save Event")}
         >
           Save
         </button>

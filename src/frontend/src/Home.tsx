@@ -7,6 +7,7 @@ import { ProfileBar } from "./HomeNav/ProfileBar";
 import "./Home.css";
 import EventPopup from "./HomeComponents/EventPopup";
 
+
 function Home() {
   const [isEventPopupOpen, setIsEventPopupOpen] = useState(false);
 
@@ -29,9 +30,9 @@ function Home() {
         +
       </button>
 
-      {isEventPopupOpen && (
+      {{isEventPopupOpen && (
         <EventPopup onClose={() => setIsEventPopupOpen(false)} />
-      )}
+      )} */}
     </div>
   );
 }

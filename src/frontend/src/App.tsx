@@ -15,7 +15,7 @@ try{
   const response = await axios.get('http://localhost:5000/');
   console.log(response.data);
 } catch (error) {
-  console.error(error);
+  console.error("what is happening", error);
 }
 
 

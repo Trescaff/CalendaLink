@@ -3,7 +3,7 @@ const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const cors = require('cors');
 const User = require('./models/userModel');
-
+//const dotenv = require('dotenv').config();
 //const bcrypt = require('bcrypt');    //syunis - hashing dependency
 
 const app = express();
@@ -12,16 +12,7 @@ const port = 5000;
 app.use(bodyParser.json());
 app.use(cors());
 
-mongoose.connect('mongodb+srv://faizchan23:OqWnwzVYKtEkN1ws@calendalink.ph2sv.mongodb.net/?retryWrites=true&w=majority&appName=calendalink', {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
-});
-
-const users = [
-  { username: 'admin', password: '1234' },
-  { username: 'admin1', password: '1234' }
-];
-
+mongoose.connect('mongodb+srv://faizchan23:OqWnwzVYKtEkN1ws@calendalink.ph2sv.mongodb.net/?retryWrites=true&w=majority&appName=calendalink', {});
 
 // POST: Login
 app.post('/login', async (req, res) => {
@@ -117,12 +108,77 @@ app.post('/users/connect', async (req, res) => {
     res.status(500).json({ message: 'Server error' });
   }
 });
-//sampai sini sahaja sekian
+
+app.get('/user/:username', async (req, res) => {
+  const { username } = req.params;
+  try {
+    const user = await User.findOne({ username });
+    if (user) {
+      res.status(200).send(user);
+    } else {
+      res.status(404).send({ message: 'User not found' });
+    }
+  } catch (error) {
+    console.error('Error fetching user:', error);
+    res.status(500).send({ message: 'An error occurred' });
+  }
+});
+
+app.get('/user/:username/friends', async (req, res) => {
+  const { username } = req.params;
+  try {
+    const user = await User.findOne({ username });
+    if (user) {
+      const friends = await User.find({ username: { $in: user.connectedUsers } });
+      res.status(200).send(friends);
+    } else {
+      res.status(404).send({ message: 'User not found' });
+    }
+  } catch (error) {
+    console.error('Error fetching friends:', error);
+    res.status(500).send({ message: 'An error occurred' });
+  }
+});
 
 
 app.listen(port, () => {
   console.log(`Server running on http://localhost:${port}`);
 });
+
+// //Email Noder
+//  const nodemailer = require("nodemailer");
+//  const transporter = nodemailer.createTransport({
+//    service: 'gmail',
+//    host: "smtp.gmail.com",
+//    port: 5173,
+//    secure: true,
+//    auth: {
+//      user: "amirulhafiz.arman@gmail.com", //sender gmail address
+//      pass: "Hafiz0908#",    // App password from gmil account
+//  },
+// });
+
+//  const Option = {
+//      from: {
+//        name: 'Hafiz',
+//        address: "amirulhafiz.arman@gmail.com" 
+//    }, //sender adresss
+//    to: "faizchan24@gmail.com",  // list of yg dpt
+//    subject: "HELLO",            // subject line
+//    text: "BOy",                 // plain text body
+//    html: "<b>Hello World</b>",  // HTML body
+//   }
+
+//   const sendMail = async (transporter, Option) => {
+//     try {
+//       await transporter.sendMail()
+//       console.log('Email has been sent');
+//     } catch (error) {
+//       console.error(error);
+//     }
+//   }
+
+//   sendMail(transporter, Option);
 
 //test pull
 //test push

@@ -16,7 +16,7 @@ function Login() {
       const response = await axios.post('http://localhost:5000/login', { username, password });
       setMessage(response.data.message);
       if(response.status === 200) {
-        navigate("/Home");
+        navigate("/Home", { state: { username } });
         }
       } catch (error) {
       if (axios.isAxiosError(error)) {
