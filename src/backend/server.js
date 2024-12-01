@@ -3,6 +3,7 @@ const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const cors = require('cors');
 const User = require('./models/userModel');
+const nodemailer = require('nodemailer');
 //const dotenv = require('dotenv').config();
 //const bcrypt = require('bcrypt');    //syunis - hashing dependency
 
@@ -55,6 +56,7 @@ app.post('/register', async (req, res) => {
 app.post('/calendar/add', async (req, res) => {
   try {
     const { username, event } = req.body;
+    console.log('Received data:', { username, event });
 
     // Find the user
     const user = await User.findOne({ username });
@@ -140,21 +142,35 @@ app.get('/user/:username/friends', async (req, res) => {
   }
 });
 
+app.get('/user/:username/events', async (req, res) => {
+  const { username } = req.params;
+  try {
+    const user = await User.findOne({ username });
+    if (user) {
+      res.status(200).send(user.calendar);
+    } else {
+      res.status(404).send({ message: 'User not found' });
+    }
+  } catch (error) {
+    console.error('Error fetching events:', error);
+    res.status(500).send({ message: 'Server error' });
+  }
+});
+
 
 app.listen(port, () => {
   console.log(`Server running on http://localhost:${port}`);
 });
 
 // //Email Noder
-//  const nodemailer = require("nodemailer");
 //  const transporter = nodemailer.createTransport({
 //    service: 'gmail',
 //    host: "smtp.gmail.com",
-//    port: 5173,
+//    port: 465, //Port for SSL/TSL
 //    secure: true,
 //    auth: {
 //      user: "amirulhafiz.arman@gmail.com", //sender gmail address
-//      pass: "Hafiz0908#",    // App password from gmil account
+//      pass: "jghk uyst ccac cgzw",    // App password from gmail account
 //  },
 // });
 
@@ -163,7 +179,7 @@ app.listen(port, () => {
 //        name: 'Hafiz',
 //        address: "amirulhafiz.arman@gmail.com" 
 //    }, //sender adresss
-//    to: "faizchan24@gmail.com",  // list of yg dpt
+//    to:  "234@gmail.com",// list of yg dpt
 //    subject: "HELLO",            // subject line
 //    text: "BOy",                 // plain text body
 //    html: "<b>Hello World</b>",  // HTML body
@@ -171,7 +187,7 @@ app.listen(port, () => {
 
 //   const sendMail = async (transporter, Option) => {
 //     try {
-//       await transporter.sendMail()
+//       await transporter.sendMail(Option)
 //       console.log('Email has been sent');
 //     } catch (error) {
 //       console.error(error);
@@ -180,41 +196,41 @@ app.listen(port, () => {
 
 //   sendMail(transporter, Option);
 
-//test pull
-//test push
+ const transporter = nodemailer.createTransport({
+   service: 'gmail',
+   host: "smtp.gmail.com",
+   port: 465, //Port for SSL/TSL
+   secure: true,
+   auth: {
+     user: "amirulhafiz.arman@gmail.com", //sender gmail address
+     pass: "jghk uyst ccac cgzw",    // App password from gmail account
+ },
+});
 
-// const express = require("express");
-// const app = express();
-// const cors = require("cors");
+app.post("/send-email", async (req, res) => {
+  const {recipientEmail} = req.body;
 
-// // Import routes
-// const usersRouter = require('./routes/users');
-// const inboundRouter = require('./routes/inbound');
-// const outboundRouter = require('./routes/outbound');
-// const inventoryRouter = require('./routes/inventory');
+  if (!recipientEmail) {
+    return res.status(400).json({error: "Recipient email is required"});
+  }
 
-// // Middleware
-// app.use(express.json());
-// app.use(cors());
+  const emailOptions = {
+    from: {
+      name: "Hafiz",
+      address: "amirulhafiz.arman@gmail.com"
+    },
+    to: recipientEmail,
+    subject: "Hello",
+    text: "testing",
+    html: "TEST 1",
+  };
 
-// // Routes
-// app.use('/api/users', usersRouter);
-// app.use('/api/inbound', inboundRouter);
-// app.use('/api/outbound', outboundRouter);
-// app.use('/api/inventory', inventoryRouter);
-
-// // Start the server
-// app.listen(8080, () => {
-//     console.log("Server started on port 8080");
-// });
-
-// // Get all inbound products
-// router.get('/', (req, res) => {
-//   db.query('SELECT * FROM inbound', [], (err, results) => {
-//       if (err) {
-//           console.error('Database error:', err);
-//           return res.status(500).json({ error: 'Database query failed' });
-//       }
-//       res.json(results);
-//   });
-// });
+  try {
+    await transporter.sendMail(emailOptions);
+    console.log("Email sent successfully");
+    res.status(200).json({ message: "Sent successfully"});
+  } catch (error) {
+    console.error("Error sending email:", error.message);
+    res.status(500).json({error: "Failed"});
+  }
+});

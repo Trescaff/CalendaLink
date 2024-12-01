@@ -19,7 +19,7 @@ function Home() {
           <ProfileBar />
           <FriendList />
         </ul>
-        <CalendarDisplay />
+        <CalendarDisplay/>
       </div>
       <BotNavBar />
 
@@ -27,12 +27,12 @@ function Home() {
         className="add-event-button"
         onClick={() => setIsEventPopupOpen(true)}
       >
-        +
+       + 
       </button>
-
-      {{isEventPopupOpen && (
-        <EventPopup onClose={() => setIsEventPopupOpen(false)} />
-      )} */}
+    
+      {isEventPopupOpen && (
+        <EventPopup onClose={() => setIsEventPopupOpen(false)} onSaveSuccess={() => {}} />
+      )} 
     </div>
   );
 }

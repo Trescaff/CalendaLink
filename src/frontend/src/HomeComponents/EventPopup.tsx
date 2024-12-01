@@ -4,8 +4,7 @@ import "./EventPopupCSS.css";
 
 interface EventPopupProps {
   onClose: () => void;
-  onSaveSuccess: () => void; // Callback for success
-  username: string; // Add this prop
+  onSaveSuccess: () => void; // Callback for successful save
 }
 
 const EventPopup: React.FC<EventPopupProps> = ({ onClose, onSaveSuccess }) => {
@@ -19,6 +18,7 @@ const EventPopup: React.FC<EventPopupProps> = ({ onClose, onSaveSuccess }) => {
   const [loading, setLoading] = useState(false);
 
   const handleSave = async () => {
+
     const eventData = {
       title,
       startTime,
@@ -29,9 +29,10 @@ const EventPopup: React.FC<EventPopupProps> = ({ onClose, onSaveSuccess }) => {
       date,
     };
 
+
     try {
       const response = await axios.post("http://localhost:5000/calendar/add", {
-        //username, // Use the dynamic username prop
+        username: 'afqhmni', // Use the dynamic username prop
         event: eventData,
       });
 

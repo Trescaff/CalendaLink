@@ -12,8 +12,8 @@ const userSchema = new mongoose.Schema({
     {
       title: { type: String, required: true }, // Event title
       description: { type: String }, // Optional event description
-      startTime: { type: Date, required: true }, // Start time of the event
-      endTime: { type: Date, required: true }, // End time of the event
+      startTime: { type: String, required: true }, // Start time of the event
+      endTime: { type: String, required: true }, // End time of the event
       date: { type: Date, required: true }, // Event date
       location: { type: String }, // Optional event location
       category: { type: String }, // Event category (e.g., Work, Personal)

@@ -1,11 +1,9 @@
-import { IoAdd } from "react-icons/io5";
+import { IoAdd, IoChevronForward } from "react-icons/io5";
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import "./FriendList.css";
-import { IoChevronForward } from "react-icons/io5";
-import ContactSelector from "./ContactSelector";
 import axios from "axios";
-
+import "./FriendList.css";
+import ContactSelector from "./ContactSelector";
 
 type Friend = {
   username: string;

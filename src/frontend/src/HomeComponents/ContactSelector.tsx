@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import axios from "axios";
 import "./ContactSelector.css";
 
 interface Contact {
@@ -20,12 +21,27 @@ const ContactSelector: React.FC<ContactSelectorProps> = ({ onClose }) => {
   ]);
 
   // Function to handle adding new email
-  const handleEmailSubmit = () => {
+  const handleEmailSubmit = async () => {
     if (newEmail.trim() !== "") {
       setContacts((prevContacts) => [
         ...prevContacts,
         { name: newEmail, status: "Added" },
       ]);
+
+      try {
+        const response = await axios.post("https://localhost:5000/send-email", {
+          recipientEmail: newEmail,
+        });
+
+        if (response.status === 200 ) {
+          console.log("Email sent successfully");
+        } else {
+          console.error("Failed to send email");
+        }
+      } catch (error) {
+        console.error("Error:");
+      }
+      
       setNewEmail(""); // Clear the input field after adding
     }
   };
