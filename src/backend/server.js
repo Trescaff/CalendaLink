@@ -34,7 +34,7 @@ app.post('/login', async (req, res) => {
 // POST: Register
 app.post('/register', async (req, res) => {
   try {
-    const { username, password } = req.body;
+    const { username, password, email } = req.body;
 
     // Check for existing user
     const existingUser = await User.findOne({ username });
@@ -44,7 +44,7 @@ app.post('/register', async (req, res) => {
     //const hashedPassword = await bcrypt.hash(password, 10);
 
     // Create user
-    const user = await User.create({ username, password });
+    const user = await User.create({ username, password, email });
     res.status(201).json({ message: 'User registered successfully', user });
   } catch (error) {
     console.error(error);
@@ -147,20 +147,22 @@ app.get('/user/:username/events', async (req, res) => {
   try {
     const user = await User.findOne({ username });
     if (user) {
-      res.status(200).send(user.calendar);
+     if (user.calendar.length === 0) {
+        res.status(406).send({ message: 'No events found' });
+      }else{
+        res.status(200).send(user.calendar);
+      }
     } else {
       res.status(404).send({ message: 'User not found' });
     }
   } catch (error) {
-    console.error('Error fetching events:', error);
+    console.error('Error fetching events backend:', error);
     res.status(500).send({ message: 'Server error' });
   }
 });
 
-//kena tambah 0.0.0.0 ke kat sini?
-app.listen(port, () => {
-  console.log(`Server running on http://localhost:${port}`);
-});
+
+
 
 // //Email Noder
 //  const transporter = nodemailer.createTransport({
@@ -179,7 +181,7 @@ app.listen(port, () => {
 //        name: 'Hafiz',
 //        address: "amirulhafiz.arman@gmail.com" 
 //    }, //sender adresss
-//    to:  "234@gmail.com",// list of yg dpt
+//    to:  "amirulhafiz.arman@gmail.com",// list of yg dpt
 //    subject: "HELLO",            // subject line
 //    text: "BOy",                 // plain text body
 //    html: "<b>Hello World</b>",  // HTML body
@@ -196,7 +198,7 @@ app.listen(port, () => {
 
 //   sendMail(transporter, Option);
 
- const transporter = nodemailer.createTransport({
+const transporter = nodemailer.createTransport({
    service: 'gmail',
    host: "smtp.gmail.com",
    port: 465, //Port for SSL/TSL
@@ -207,30 +209,32 @@ app.listen(port, () => {
  },
 });
 
-app.post("/send-email", async (req, res) => {
-  const {recipientEmail} = req.body;
+app.post("/Home", async (req, res) => {
+  const {email} = req.body;
 
-  if (!recipientEmail) {
-    return res.status(400).json({error: "Recipient email is required"});
+  if (!email) {
+    return res.status(400).json({ success: false, error: "Invalid Input"});
   }
 
   const emailOptions = {
-    from: {
-      name: "Hafiz",
-      address: "amirulhafiz.arman@gmail.com"
-    },
-    to: recipientEmail,
+    from: "amirulhafiz.arman@gmail.com",
+    to: email,
     subject: "Hello",
-    text: "testing",
-    html: "TEST 1",
+    text: "hello APIZzzzzZZ",
   };
 
   try {
     await transporter.sendMail(emailOptions);
-    console.log("Email sent successfully");
-    res.status(200).json({ message: "Sent successfully"});
+    res.json({ success: true});
   } catch (error) {
-    console.error("Error sending email:", error.message);
-    res.status(500).json({error: "Failed"});
+    res.status(500).json({ success: false, error: error.message });
   }
 });
+
+
+app.listen(port, () => {
+  console.log(`Server running on http://localhost:${port}`);
+});
+
+
+

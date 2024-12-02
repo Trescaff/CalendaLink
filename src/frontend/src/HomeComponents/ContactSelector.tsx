@@ -4,7 +4,7 @@ import "./ContactSelector.css";
 
 interface Contact {
   name: string;
-  status: "Add" | "Added";
+  status: string;
 }
 
 interface ContactSelectorProps {
@@ -29,23 +29,36 @@ const ContactSelector: React.FC<ContactSelectorProps> = ({ onClose }) => {
       ]);
 
       try {
-        const response = await axios.post("https://localhost:5000/send-email", {
-          recipientEmail: newEmail,
-          message: "Hello",
+        const response = await axios.post("http://localhost:5000/Home", {
+          email: newEmail,
         });
 
-        if (response.data) {
+        if (response.data.success) {
+          setContacts((prevContacts) =>
+            prevContacts.map((contact) =>
+              contact.name === newEmail
+                ? { ...contact, status: "Email Sent" }
+                : contact
+            )
+          );
           console.log("Email sent successfully");
-        } else {
+        }
+        } catch (error) {
+          setContacts((prevContacts) =>
+            prevContacts.map((contact) =>
+              contact.name === newEmail
+                ? { ...contact, status: "Failed" }
+                : contact
+            )
+          );
           console.error("Failed to send email");
         }
-      } catch (error) {
-        console.error("Error:");
+       finally {
+        setNewEmail(""); // Clear the input field after adding
       }
-      
-      setNewEmail(""); // Clear the input field after adding
     }
   };
+
 
   const handleStatusChange = (index: number) => {
     setContacts((prev) =>

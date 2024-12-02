@@ -4,6 +4,7 @@ import { createViewWeek, createViewMonthGrid } from "@schedule-x/calendar";
 import "@schedule-x/theme-default/dist/index.css";
 import { createEventModalPlugin } from "@schedule-x/event-modal";
 import { createDragAndDropPlugin } from "@schedule-x/drag-and-drop";
+import { createEventsServicePlugin } from "@schedule-x/events-service";
 import axios from "axios";
 
 // function CalendarDisplay() {
@@ -33,49 +34,67 @@ import axios from "axios";
 function CalendarDisplay() {
 
   type Event = {
-    id: string;
+    id: number;
     title: string;
+    description: string;
     startTime: string;
     endTime: string;
-    date: string; // Add this line
-    description: string;
-    location?: string; // Optional
-    category?: string; // Optional
-    notifications?: {
-    repeat: string;
-    methods: string[];
-  }; // Optional
+    date: Date;
+    location?: string;
+    category?: string;
   };
 
+  const formatDate = (isoDate: string | Date) => {
+    const date = new Date(isoDate);
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, "0");
+    const day = String(date.getDate()).padStart(2, "0");
+    return `${year}-${month}-${day}`;
+  };
+
+  // return <ScheduleXCalendar calendarApp={calendar} />;
   const [events, setEvents] = useState<Event[]>([]);
+  // Initialize the events service plugin
+  const eventsServicePlugin = createEventsServicePlugin();
 
   useEffect(() => {
+    // Fetch events from your API and add them to the events service
     const fetchEvents = async () => {
       try {
         const response = await axios.get("http://localhost:5000/user/afqhmni/events");
-        setEvents(response.data);
-        console.log("Events fetched successfully:", events[0].date);
+        //const data = await response.json(); 
+        console.log("Events fetched:", response.data); 
+        
+        // Map events to the expected structure and add them to the events service
+        events.map((event, index) => {
+          calendar.eventsService.add({ 
+            id: index + 1, // Ensure each event has a unique ID
+            title: event.title,
+            start: `${formatDate(new Date(event.date))} ${event.startTime}`, // Combine date and time
+            end: `${formatDate(new Date(event.date))} ${event.endTime}`, // Combine date and time
+            description: event.description,
+      })}); 
+      setEvents(response.data);
       } catch (error) {
         console.error("Error fetching events:", error);
       }
     };
-
     fetchEvents();
-  }, []);
+  }, []); // Dependency to ensure the plugin instance is always available
 
+  // Configure the calendar app
   const calendar = useCalendarApp({
     views: [createViewWeek(), createViewMonthGrid()],
-    events: events.map((event, index) => ({
-      id: index.toString(),
-      title: event.title,
-      start: `${event.date}T${event.startTime}`,
-      end: `${event.date}T${event.endTime}`,
-      description: event.description,
-    })),
+    
     selectedDate: "2025-01-01",
+    plugins: [createEventModalPlugin(), createDragAndDropPlugin(), createEventsServicePlugin()],
   });
 
-  return <ScheduleXCalendar calendarApp={calendar} />;
+  return (
+        <div>
+          <ScheduleXCalendar calendarApp={calendar} />
+        </div>
+      );
 }
 
 export default CalendarDisplay;

@@ -18,7 +18,7 @@ function FriendList() {
   useEffect(() => {
     const fetchFriends = async () => {
       try {
-        const response = await axios.get("http://localhost:5000/user/Syuhada/friends");
+        const response = await axios.get("http://localhost:5000/user/afqhmni/friends");
         setFriends(response.data);
       } catch (error) {
         console.error("Error fetching friends:", error);

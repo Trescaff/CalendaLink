@@ -80,6 +80,7 @@ const EntryFrame: React.FC<EntryProps> = ({
   );
 };
 
+//All Calendar - tukar edit and delete button
 const Entries: React.FC = () => {
   const entries = [
     { calendarName: "Calendar Name", imageSrc: pic },
@@ -92,9 +93,42 @@ const Entries: React.FC = () => {
 
   const handleOption1 = (index: number) => {
     console.log(`option1 ${index}`);
+    // const newCalendarName = prompt("Enter new calendar name:", entries[index].calendarName);
+    // if (newCalendarName) {
+    //   // Update the name on the frontend
+    //   const updatedEntries = [...entries];
+    //   updatedEntries[index].calendarName = newCalendarName;
+    //   setEntries(updatedEntries);
+
+    //   // Send the updated name to the backend
+    //   const updatedCalendar = { ...entries[index], calendarName: newCalendarName };
+    //   axios.put(`http://localhost:5000/api/calendars/${entries[index].id}`, updatedCalendar)
+    //     .then(() => {
+    //       console.log("Calendar name updated successfully.");
+    //     })
+    //     .catch((error) => {
+    //       console.error("Error updating the calendar name:", error);
+    //     });
+    // }
   };
 
   const handleOption2 = (index: number) => {
+    // const confirmed = window.confirm("Are you sure you want to delete this calendar?");
+    // if (confirmed) {
+    //   const deletedCalendar = entries[index];
+    //   // Remove from the frontend
+    //   const updatedEntries = entries.filter((_, idx) => idx !== index);
+    //   setEntries(updatedEntries);
+
+    //   // Send delete request to the backend
+    //   axios.delete(`http://localhost:5000/api/calendars/${deletedCalendar.id}`)
+    //     .then(() => {
+    //       console.log("Calendar deleted successfully.");
+    //     })
+    //     .catch((error) => {
+    //       console.error("Error deleting the calendar:", error);
+    //     });
+    // }
     console.log(`option2 ${index}`);
   };
 
