@@ -157,7 +157,7 @@ app.get('/user/:username/events', async (req, res) => {
   }
 });
 
-
+//kena tambah 0.0.0.0 ke kat sini?
 app.listen(port, () => {
   console.log(`Server running on http://localhost:${port}`);
 });

@@ -31,9 +31,10 @@ const ContactSelector: React.FC<ContactSelectorProps> = ({ onClose }) => {
       try {
         const response = await axios.post("https://localhost:5000/send-email", {
           recipientEmail: newEmail,
+          message: "Hello",
         });
 
-        if (response.status === 200 ) {
+        if (response.data) {
           console.log("Email sent successfully");
         } else {
           console.error("Failed to send email");
