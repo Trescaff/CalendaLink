@@ -6,7 +6,7 @@ const User = require('./models/userModel');
 const nodemailer = require('nodemailer');
 //const dotenv = require('dotenv').config();
 //const bcrypt = require('bcrypt');    //syunis - hashing dependency
-
+//OI FAIZ
 const app = express();
 const port = 5000;
 
@@ -89,6 +89,31 @@ app.get('/calendar/:username', async (req, res) => {
   }
 });
 
+app.get('/calendar/remove/:username/:eventId', async (req, res) => {
+  try {
+    const { username, eventId } = req.params;
+
+    // Find the user
+    const user = await User.findOne({ username });
+    if (!user) return res.status(404).json({ message: 'User not found' });
+
+    // Find the event index
+    const eventIndex = user.calendar.findIndex(event => event._id.toString() === eventId);
+    if (eventIndex === -1) return res.status(404).json({ message: 'Event not found' });
+
+    // Remove the event
+    user.calendar.splice(eventIndex, 1);
+
+    // Save the updated user document
+    await user.save();
+
+    res.json({ success: true, message: 'Event removed successfully' });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Server error' });
+  }
+});
+
 // POST: Connect users
 app.post('/users/connect', async (req, res) => {
   try {
@@ -160,8 +185,6 @@ app.get('/user/:username/events', async (req, res) => {
     res.status(500).send({ message: 'Server error' });
   }
 });
-
-
 
 
 // //Email Noder
@@ -237,7 +260,7 @@ app.post("/Home", async (req, res) => {
 });
 
 app.post("/verify-code", async (req, res) => {
-  const { email, code } = req.body;
+  const {username, email, code } = req.body;
   console.log("Verification codes:", verificationCodes);
   console.log("Email:", email);
   console.log("Code:", code);
@@ -251,7 +274,7 @@ app.post("/verify-code", async (req, res) => {
     if (!user) {
       return res.status(404).json({ success: false, error: "Email not found" });
     }
-    const username = user.username;
+    
     // Connect the user
     const requestingUser = await User.findOne({ username }); // Replace with actual requesting username
     if (!requestingUser) {
@@ -263,11 +286,69 @@ app.post("/verify-code", async (req, res) => {
       await requestingUser.save();
     }
 
-    res.json({ success: true, message: "User connected successfully" });
+    if (!user.connectedUsers.includes(requestingUser.username)) {
+      user.connectedUsers.push(requestingUser.username);
+      await user.save();
+    }
+
+    res.json({ success: true, message: "User connected successfully", user: user.username });
   } else {
     res.status(400).json({ success: false, error: "Invalid code" });
   }
 });
+
+//CalendarList
+// GET: Retrieve all calendars for a user
+// app.get('/AllCalendars', async (req, res) => {
+//   try {
+//     const calendars = await Calendar.find(); 
+//     res.status(200).json(calendars);
+//   } catch (error) {
+//     console.error(error);
+//     res.status(500).json({ message: 'Server error' });
+//   }
+// });
+
+// // POST: Add a new calendar
+// app.post('/AllCalendars', async (req, res) => {
+//   const { calendarName, imageSrc, userId } = req.body;
+//   try {
+//     const newCalendar = new Calendar({ calendarName, imageSrc, userId });
+//     await newCalendar.save();
+//     res.status(201).json(newCalendar);
+//   } catch (error) {
+//     console.error(error);
+//     res.status(500).json({ message: 'Server error' });
+//   }
+// });
+
+// // PUT: Update a calendar's name
+// app.put('/AllCalendars/:id', async (req, res) => {
+//   const { id } = req.params;
+//   const { calendarName, imageSrc } = req.body;
+
+//   try {
+//     const updatedCalendar = await Calendar.findByIdAndUpdate(id, { calendarName, imageSrc }, { new: true });
+//     if (!updatedCalendar) return res.status(404).json({ message: 'Calendar not found' });
+//     res.status(200).json(updatedCalendar);
+//   } catch (error) {
+//     console.error(error);
+//     res.status(500).json({ message: 'Server error' });
+//   }
+// });
+
+// // DELETE: Delete a calendar
+// app.delete('/AllCalendars/:id', async (req, res) => {
+//   const { id } = req.params;
+//   try {
+//     const deletedCalendar = await Calendar.findByIdAndDelete(id);
+//     if (!deletedCalendar) return res.status(404).json({ message: 'Calendar not found' });
+//     res.status(200).json({ message: 'Calendar deleted successfully' });
+//   } catch (error) {
+//     console.error(error);
+//     res.status(500).json({ message: 'Server error' });
+//   }
+// });
 
 app.listen(port, () => {
   console.log(`Server running on http://localhost:${port}`);

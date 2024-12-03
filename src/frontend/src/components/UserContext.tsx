@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState, ReactNode } from "react";
+import React, { createContext, useContext, useState, useEffect, ReactNode } from "react";
 
 interface UserContextType {
   username: string;
@@ -8,7 +8,14 @@ interface UserContextType {
 const UserContext = createContext<UserContextType | undefined>(undefined);
 
 export const UserProvider = ({ children }: { children: ReactNode }) => {
-  const [username, setUsername] = useState<string>("");
+  const [username, setUsernameState] = useState<string>(() => {
+    return localStorage.getItem("username") || "";
+  });
+
+  const setUsername = (username: string) => {
+    setUsernameState(username);
+    localStorage.setItem("username", username); // Store the username in localStorage
+  };
 
   return (
     <UserContext.Provider value={{ username, setUsername }}>

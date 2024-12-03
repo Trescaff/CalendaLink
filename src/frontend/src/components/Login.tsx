@@ -11,7 +11,6 @@ function Login() {
   const [message, setMessage] = useState("");
   const navigate = useNavigate();
   const { username, setUsername } = useUser();
-  //const [username, setUsername] = useState("");
 
   const handleLogin = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -19,6 +18,7 @@ function Login() {
       const response = await axios.post('http://localhost:5000/login', { username, password });
       setMessage(response.data.message);
       if(response.status === 200) {
+        setUsername(username);
         navigate("/Home", { state: { username } });
         }
       } catch (error) {
@@ -65,7 +65,6 @@ function Login() {
               Don't have an account? <Link to="/Register">Register</Link>
             </p>
           </div>
-          <Link to="/Home">Home</Link>
         </form>
       </div>
     </div>

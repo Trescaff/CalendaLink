@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import axios from "axios";
 import "./ContactSelector.css";
+import { useUser } from "../components/UserContext";
 
 interface Contact {
   name: string;
@@ -15,12 +16,10 @@ const ContactSelector: React.FC<ContactSelectorProps> = ({ onClose }) => {
   const [activeTab, setActiveTab] = useState<"Email" | "Contact">("Contact");
   const [searchQuery, setSearchQuery] = useState("");
   const [newEmail, setNewEmail] = useState(""); // State for the email input
-  const [contacts, setContacts] = useState<Contact[]>([
-    { name: "Afiqah", status: "Added" },
-    { name: "Hafiz", status: "Add" },
-  ]);
+  const [contacts, setContacts] = useState<Contact[]>([]);
   const [step, setStep] = useState(1);
   const [verificationCode, setVerificationCode] = useState("");
+  const { username } = useUser(); 
 
   // Function to handle adding new email
   const handleEmailSubmit = async () => {
@@ -64,12 +63,13 @@ const ContactSelector: React.FC<ContactSelectorProps> = ({ onClose }) => {
         const response = await axios.post("http://localhost:5000/verify-code", {
           email: newEmail,
           code: verificationCode,
+          username: username,
         });
 
         if (response.data.success) {
           setContacts((prevContacts) => [
             ...prevContacts,
-            { name: newEmail, status: "Added" },
+            { name: response.data.user, status: "Added" },
           ]);
           setStep(1); // Reset to step 1
           setNewEmail("");
@@ -107,7 +107,7 @@ const ContactSelector: React.FC<ContactSelectorProps> = ({ onClose }) => {
         width: "400px",
         backgroundColor: "white",
         borderRadius: "10px",
-        boxShadow: "0px 4px 10px rgba(0, 0, 0, 0.1)",
+        boxShadow: "0px 4px 10px rgba(8, 0, 0, 0.1)",
         padding: "20px",
         position: "relative",
         fontFamily: "Arial, sans-serif",

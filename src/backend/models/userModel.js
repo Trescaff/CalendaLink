@@ -26,6 +26,12 @@ const userSchema = new mongoose.Schema({
     },
   ],
   connectedUsers: [{ type: String }], // List of connected users
+  allCalendars: [
+    {
+      calendarName: { type: String, required: true },
+      imageSrc: { type: String, default: "" },
+    },
+  ],
   createdAt: { type: Date, default: Date.now },
 });
 
