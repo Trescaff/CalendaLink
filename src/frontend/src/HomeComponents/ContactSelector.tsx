@@ -19,6 +19,8 @@ const ContactSelector: React.FC<ContactSelectorProps> = ({ onClose }) => {
     { name: "Afiqah", status: "Added" },
     { name: "Hafiz", status: "Add" },
   ]);
+  const [step, setStep] = useState(1);
+  const [verificationCode, setVerificationCode] = useState("");
 
   // Function to handle adding new email
   const handleEmailSubmit = async () => {
@@ -53,7 +55,32 @@ const ContactSelector: React.FC<ContactSelectorProps> = ({ onClose }) => {
           );
           console.error("Failed to send email");
         }
-       finally {
+    }
+  };
+
+  const handleCodeSubmit = async () => {
+    if (verificationCode.trim() !== "") {
+      try {
+        const response = await axios.post("http://localhost:5000/verify-code", {
+          email: newEmail,
+          code: verificationCode,
+        });
+
+        if (response.data.success) {
+          setContacts((prevContacts) => [
+            ...prevContacts,
+            { name: newEmail, status: "Added" },
+          ]);
+          setStep(1); // Reset to step 1
+          setNewEmail("");
+          setVerificationCode("");
+        } else {
+          alert("Invalid verification code");
+        }
+      } catch (error) {
+        console.error("Error verifying code:", error);
+      }
+      finally {
         setNewEmail(""); // Clear the input field after adding
       }
     }
@@ -145,7 +172,7 @@ const ContactSelector: React.FC<ContactSelectorProps> = ({ onClose }) => {
       </div>
 
       {/* Email Tab */}
-      {activeTab === "Email" && (
+      {activeTab === "Email" && step === 1 ? (
         <div
           style={{
             display: "flex",
@@ -188,6 +215,16 @@ const ContactSelector: React.FC<ContactSelectorProps> = ({ onClose }) => {
           >
             Add Email
           </button>
+        </div>
+      ): (
+        <div>
+          <input
+            type="text"
+            value={verificationCode}
+            onChange={(e) => setVerificationCode(e.target.value)}
+            placeholder="Enter verification code"
+          />
+          <button onClick={handleCodeSubmit}>Verify Code</button>
         </div>
       )}
 

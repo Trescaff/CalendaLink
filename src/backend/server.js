@@ -209,6 +209,8 @@ const transporter = nodemailer.createTransport({
  },
 });
 
+const verificationCodes = {};
+
 app.post("/Home", async (req, res) => {
   const {email} = req.body;
 
@@ -216,11 +218,14 @@ app.post("/Home", async (req, res) => {
     return res.status(400).json({ success: false, error: "Invalid Input"});
   }
 
+  const code = Math.floor(1000 + Math.random() * 9000).toString(); // Generate 4-digit code
+  verificationCodes[email] = code; // Store the code temporarily
+
   const emailOptions = {
     from: "amirulhafiz.arman@gmail.com",
     to: email,
-    subject: "Hello",
-    text: "hello APIZzzzzZZ",
+    subject: "Verification Code",
+    text: `Your verification code is: ${code}`,
   };
 
   try {
@@ -231,6 +236,38 @@ app.post("/Home", async (req, res) => {
   }
 });
 
+app.post("/verify-code", async (req, res) => {
+  const { email, code } = req.body;
+  console.log("Verification codes:", verificationCodes);
+  console.log("Email:", email);
+  console.log("Code:", code);
+  console.log("Verification code:", verificationCodes[email]);
+
+  if (verificationCodes[email] === code) {
+    delete verificationCodes[email]; // Remove the code after verification
+    console.log("Verification successful");
+
+    const user = await User.findOne({ email });
+    if (!user) {
+      return res.status(404).json({ success: false, error: "Email not found" });
+    }
+    const username = user.username;
+    // Connect the user
+    const requestingUser = await User.findOne({ username }); // Replace with actual requesting username
+    if (!requestingUser) {
+      return res.status(404).json({ success: false, error: "Requesting user not found" });
+    }
+
+    if (!requestingUser.connectedUsers.includes(user.username)) {
+      requestingUser.connectedUsers.push(user.username);
+      await requestingUser.save();
+    }
+
+    res.json({ success: true, message: "User connected successfully" });
+  } else {
+    res.status(400).json({ success: false, error: "Invalid code" });
+  }
+});
 
 app.listen(port, () => {
   console.log(`Server running on http://localhost:${port}`);
