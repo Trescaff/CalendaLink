@@ -6,6 +6,7 @@ import CalendarDisplay from "./Calendar/CalendarDisplay";
 import { ProfileBar } from "./HomeNav/ProfileBar";
 import "./Home.css";
 import EventPopup from "./HomeComponents/EventPopup";
+import DeleteButton from "./components/DeleteButton";
 
 
 function Home() {
@@ -29,6 +30,8 @@ function Home() {
       >
        + 
       </button>
+
+      <DeleteButton/>
     
       {isEventPopupOpen && (
         <EventPopup onClose={() => setIsEventPopupOpen(false)} onSaveSuccess={() => {}} />

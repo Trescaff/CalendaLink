@@ -3,12 +3,13 @@ import { ScheduleXCalendar, useCalendarApp } from "@schedule-x/react";
 import { createViewWeek, createViewMonthGrid } from "@schedule-x/calendar";
 import "@schedule-x/theme-default/dist/index.css";
 import { createEventModalPlugin } from "@schedule-x/event-modal";
+import { createDragAndDropPlugin } from "@schedule-x/drag-and-drop";
 import { createEventsServicePlugin } from "@schedule-x/events-service";
 import axios from "axios";
 import { useUser } from "../components/UserContext";
 import DeleteButton from "../components/DeleteButton";
 
-function CalendarDisplay() {
+function Combined2() {
 
   const { username } = useUser();
 
@@ -21,6 +22,7 @@ function CalendarDisplay() {
     date: Date;
     location?: string;
     category?: string;
+    username: string;
   };
 
   // Get today's date in the required format (YYYY-MM-DD)
@@ -44,8 +46,8 @@ function CalendarDisplay() {
     // Fetch events from your API and add them to the events service
     const fetchEvents = async () => {
       try {
-        const response = await axios.get(`http://localhost:5000/user/${username}/events`);
-        console.log("Events fetched:", response.data);
+        const response = await axios.get(`http://localhost:5000/user/${username}/combined-events`);
+        console.log("Combined events fetched:", response.data);
 
         // Clear existing events to avoid duplicates
         eventsServicePlugin.getAll().forEach((event) => {
@@ -55,12 +57,26 @@ function CalendarDisplay() {
         response.data.forEach((event: any, index: number) => {
           eventsServicePlugin.add({
             id: event.id,
-            title: event.title,
+            title: `${event.title} (${event.username})`,
             start: `${formatDate(new Date(event.date))} ${event.startTime}`,
             end: `${formatDate(new Date(event.date))} ${event.endTime}`,
             description: event.description,
           });
         });
+
+        const response2 = await axios.get(`http://localhost:5000/user/${username}/events`);
+        console.log("Events fetched:", response2.data);
+
+        response2.data.forEach((event: any, index: number) => {
+            eventsServicePlugin.add({
+              id: event.id,
+              title: `${event.title} (${username})`,
+              start: `${formatDate(new Date(event.date))} ${event.startTime}`,
+              end: `${formatDate(new Date(event.date))} ${event.endTime}`,
+              description: event.description,
+            });
+          });
+
       } catch (error) {
         console.error("Error fetching events:", error);
       }
@@ -84,7 +100,7 @@ function CalendarDisplay() {
   }; 
 
   // Configure the calendar app
- const calendar = useCalendarApp({
+  const calendar = useCalendarApp({
     views: [createViewWeek(), createViewMonthGrid()],
     selectedDate: today,
     plugins: [
@@ -92,20 +108,7 @@ function CalendarDisplay() {
       eventsServicePlugin,
     ],
   });
-  
-  const getEventIndex = (id: number) => {
-    const allEvents = eventsServicePlugin.getAll();
-    const index = allEvents.findIndex((event) => event.id ===id);
-    if (index === -1) {
-      console.error("Event error");
-    } else {
-      console.log('Index of event ID ${id}', index);
-    }
-    return index;
-  };
 
-  getEventIndex( 2);
-  
   const modalStyle: React.CSSProperties = {
     position: "fixed",
     top: "50%",
@@ -143,5 +146,4 @@ function CalendarDisplay() {
 }
 
 
-export default CalendarDisplay;
-
+export default Combined2;
