@@ -1,10 +1,16 @@
+import UserCard from "../components/UserCard";
 import { NavBar } from "../HomeNav/NavBar";
+import "./About.css";
+import BotNavBar from "./BotNavBar";
 
 const About = () => {
   return (
     <div>
       <NavBar />
-      <h1>About</h1>
+      <div className="usercard">
+        <UserCard />
+      </div>
+      <BotNavBar />
     </div>
   );
 };
