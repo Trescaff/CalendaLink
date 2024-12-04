@@ -1,13 +1,12 @@
-import { Link } from "react-router-dom";
 import { NavBar } from "./NavBar";
+import SettingsPage from "./SettingsPage";
 import BotNavBar from "../BottomNavBar/BotNavBar";
 
 function Setting() {
   return (
     <div>
       <NavBar />
-      <h1>Setting</h1>
-      <Link to="/">Logout</Link>
+      <SettingsPage />
       <BotNavBar />
     </div>
   );

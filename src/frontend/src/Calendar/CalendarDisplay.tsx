@@ -52,7 +52,7 @@ function CalendarDisplay() {
           eventsServicePlugin.remove(event.id);
         });
   
-        response.data.forEach((event: any, index: number) => {
+        response.data.forEach((event: any) => {
           eventsServicePlugin.add({
             id: event.id,
             title: event.title,
@@ -69,79 +69,148 @@ function CalendarDisplay() {
     fetchEvents();
   }, []);
 
-  const handleDeleteEvent = async () => {
-    if (selectedEvent) {
-      try {
-        eventsServicePlugin.remove(selectedEvent.id);
-        await axios.delete(`http://localhost:5000/calendar/remove/${username}/${selectedEvent.id}`);
-        setEvents((prevEvents) => prevEvents.filter((event) => event.id !== selectedEvent.id));
-        setSelectedEvent(null);
-        console.log("Event deleted:", selectedEvent.id);
-      } catch (error) {
-        console.error("Error deleting event:", error);
-      }
-    }
-  }; 
+//   const handleDeleteEvent = async () => {
+//     if (selectedEvent) {
+//       try {
+//         eventsServicePlugin.remove(selectedEvent.id);
+//         await axios.delete(`http://localhost:5000/calendar/remove/${username}/${selectedEvent.id}`);
+//         setEvents((prevEvents) => prevEvents.filter((event) => event.id !== selectedEvent.id));
+//         setSelectedEvent(null);
+//         console.log("Event deleted:", selectedEvent.id);
+//       } catch (error) {
+//         console.error("Error deleting event:", error);
+//       }
+//     }
+//   }; 
 
-  // Configure the calendar app
- const calendar = useCalendarApp({
-    views: [createViewWeek(), createViewMonthGrid()],
-    selectedDate: today,
-    plugins: [
-      createEventModalPlugin(),
-      eventsServicePlugin,
-    ],
-  });
+//   // Configure the calendar app
+//  const calendar = useCalendarApp({
+//     views: [createViewWeek(), createViewMonthGrid()],
+//     selectedDate: today,
+//     plugins: [
+//       createEventModalPlugin(),
+//       eventsServicePlugin,
+//     ],
+//   });
   
-  const getEventIndex = (id: number) => {
-    const allEvents = eventsServicePlugin.getAll();
-    const index = allEvents.findIndex((event) => event.id ===id);
-    if (index === -1) {
-      console.error("Event error");
-    } else {
-      console.log('Index of event ID ${id}', index);
-    }
-    return index;
-  };
+//   const getEventIndex = (id: number) => {
+//     const allEvents = eventsServicePlugin.getAll();
+//     const index = allEvents.findIndex((event) => event.id ===id);
+//     if (index === -1) {
+//       console.error("Event error");
+//     } else {
+//       console.log('Index of event ID ${id}', index);
+//     }
+//     return index;
+//   };
 
-  getEventIndex( 2);
+//   getEventIndex( 2);
   
-  const modalStyle: React.CSSProperties = {
-    position: "fixed",
-    top: "50%",
-    left: "50%",
-    transform: "translate(-50%, -50%)",
-    background: "white",
-    padding: "20px",
-    boxShadow: "0 4px 8px rgba(0, 0, 0, 0.2)",
-    zIndex: 1000,
+//   const modalStyle: React.CSSProperties = {
+//     position: "fixed",
+//     top: "50%",
+//     left: "50%",
+//     transform: "translate(-50%, -50%)",
+//     background: "white",
+//     padding: "20px",
+//     boxShadow: "0 4px 8px rgba(0, 0, 0, 0.2)",
+//     zIndex: 1000,
+//   }
+  
+//   const buttonStyle: React.CSSProperties = {
+//     margin: "10px",
+//   }
+  
+//   return (
+//     <div>
+//       <ScheduleXCalendar calendarApp={calendar} />
+//       {selectedEvent && (
+//         <div style={modalStyle}>
+//           <h3>Edit Event</h3>
+//           <p>Are you sure you want to delete this event?</p>
+//           <p>Title: {selectedEvent.title}</p>
+//           <p>Description: {selectedEvent.description}</p>
+//           <p>Start Time: {selectedEvent.startTime}</p>
+//           <p>End Time: {selectedEvent.endTime}</p>
+//           <DeleteButton onClick={handleDeleteEvent} />
+//           <button type="button" onClick={() => setSelectedEvent(null)}>
+//             Cancel
+//           </button>
+//         </div>
+//       )}
+//     </div>
+//   );
+// }
+
+
+// export default CalendarDisplay;
+
+const handleDeleteEvent = async () => {
+  if (selectedEvent) {
+    try {
+      await axios.delete(
+        `http://localhost:5000/calendar/remove/${username}/${selectedEvent.id}`
+      );
+      eventsServicePlugin.remove(selectedEvent.id);
+
+      setEvents((prevEvents) =>
+        prevEvents.filter((event) => event.id !== selectedEvent.id)
+      );
+      setSelectedEvent(null);
+      console.log("Event deleted:", selectedEvent.id);
+    } catch (error) {
+      console.error("Error deleting event:", error);
+    }
   }
-  
-  const buttonStyle: React.CSSProperties = {
-    margin: "10px",
-  }
-  
-  return (
-    <div>
-      <ScheduleXCalendar calendarApp={calendar} />
+};
+
+// Configure the calendar app
+const calendar = useCalendarApp({
+  views: [createViewWeek(), createViewMonthGrid()],
+  selectedDate: today,
+  plugins: [createEventModalPlugin(), eventsServicePlugin],
+});
+
+const handleEventSelection = (eventId: number) => {
+  const event = events.find((e) => e.id === eventId) || null;
+  setSelectedEvent(event);
+};
+
+return (
+  <div>
+    <ScheduleXCalendar calendarApp={calendar} />
+    <div style={{ marginTop: "20px" }}>
+      <div>
+        <h4>Select an Event</h4>
+        <select
+          value={selectedEvent?.id || ""}
+          onChange={(e) =>
+            handleEventSelection(Number(e.target.value))
+          }
+        >
+          <option value="" disabled>
+            Select an event
+          </option>
+          {events.map((event) => (
+            <option key={event.id} value={event.id}>
+              {event.title}
+            </option>
+          ))}
+        </select>
+      </div>
+      <DeleteButton onClick={handleDeleteEvent} />
       {selectedEvent && (
-        <div style={modalStyle}>
-          <h3>Edit Event</h3>
-          <p>Are you sure you want to delete this event?</p>
+        <div style={{ marginTop: "10px" }}>
+          <h3>Selected Event</h3>
           <p>Title: {selectedEvent.title}</p>
           <p>Description: {selectedEvent.description}</p>
           <p>Start Time: {selectedEvent.startTime}</p>
           <p>End Time: {selectedEvent.endTime}</p>
-          <DeleteButton onClick={handleDeleteEvent} />
-          <button type="button" onClick={() => setSelectedEvent(null)}>
-            Cancel
-          </button>
         </div>
       )}
     </div>
-  );
+  </div>
+);
 }
 
-
 export default CalendarDisplay;
-

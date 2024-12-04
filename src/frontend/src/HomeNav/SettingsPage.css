@@ -1,0 +1,115 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@700&display=swap');
+
+body, html {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Poppins', sans-serif;
+    background-color: #f0f2f5;
+    color: #333;
+    justify-content: center;
+  }
+
+  .settings-page {
+    display: flex;
+    height: 100vh;
+    background-color: #fff;
+    border-radius: 12px;
+    box-shadow: 0px 8px 20px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    margin: 2rem auto;
+    width: 1500px;
+  }
+
+  .settings-nav {
+    width: 15%;
+    background-color: #1e293b;
+    display: flex;
+    flex-direction: column;
+    padding: 2rem 1.5rem;
+    gap: 1rem;
+    color: #fff;
+    box-shadow: 2px 0px 8px rgba(0, 0, 0, 0.1);
+  }
+  
+  .settings-nav h2 {
+    font-size: 1.5rem;
+    margin-bottom: 1rem;
+    font-weight: bold;
+    color: #f1f5f9;
+  }
+  
+  .settings-nav button {
+    all: unset;
+    cursor: pointer;
+    padding: 0.8rem 1rem;
+    width: 140px;
+    height: 25px;
+    text-align: left;
+    font-size: 1rem;
+    color: #f1f5f9;
+    background: transparent;
+    transition: background-color 0.3s ease, color 0.3s ease;
+    gap: 0.5rem;
+    display: flex;
+  }
+  
+  .settings-nav button .material-icons {
+    font-size: 1.5rem; 
+  }
+  
+  .settings-nav button:hover {
+    background-color: #475569;
+    color: #e2e8f0;
+  }
+  
+  .settings-nav button.active {
+    background-color: #3b82f6;
+    color: #fff;
+    font-weight: bold;
+  }
+  
+  .settings-content {
+    flex: 1;
+    padding: 2rem;
+    background-color: #f9fafb;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    overflow-y: auto;
+  }
+  
+  .settings-content h2 {
+    font-size: 2rem;
+    color: #1e293b;
+    margin-bottom: 0.5rem;
+  }
+  
+  .settings-content p {
+    font-size: 1.1rem;
+    line-height: 1.6;
+    color: #475569;
+  }
+
+  .settings-content {
+    scrollbar-width: thin;
+    scrollbar-color: #cbd5e1 transparent;
+  }
+  
+  .settings-content::-webkit-scrollbar {
+    width: 8px;
+  }
+  
+  .settings-content::-webkit-scrollbar-thumb {
+    background: #cbd5e1;
+    border-radius: 4px;
+  }
+  
+  .settings-content::-webkit-scrollbar-thumb:hover {
+    background: #94a3b8;
+  }
+  
+  button:hover {
+    box-shadow: 0px 4px 12px rgba(59, 130, 246, 0.3);
+  }
+  
