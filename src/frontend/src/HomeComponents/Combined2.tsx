@@ -53,14 +53,20 @@ function Combined2() {
         eventsServicePlugin.getAll().forEach((event) => {
           eventsServicePlugin.remove(event.id);
         });
+
+        const users: string[] = [];
   
         response.data.forEach((event: any, index: number) => {
+          if (!users.includes(event.username)) {
+            users.push(event.username);
+          }
           eventsServicePlugin.add({
             id: event.id,
             title: `${event.title} (${event.username})`,
             start: `${formatDate(new Date(event.date))} ${event.startTime}`,
             end: `${formatDate(new Date(event.date))} ${event.endTime}`,
             description: event.description,
+            calendarId: users.indexOf(event.username).toString(),
           });
         });
 
