@@ -37,6 +37,7 @@ function CalendarDisplay() {
   // return <ScheduleXCalendar calendarApp={calendar} />;
   const [events, setEvents] = useState<Event[]>([]);
   const [selectedEvent, setSelectedEvent] = useState<Event | null>(null);
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   // Initialize the events service plugin (useRef to persist instance)
   const eventsServicePlugin = React.useRef(createEventsServicePlugin()).current;
   
@@ -52,7 +53,7 @@ function CalendarDisplay() {
           eventsServicePlugin.remove(event.id);
         });
   
-        response.data.forEach((event: any) => {
+        response.data.forEach((event: any, index: number) => {
           eventsServicePlugin.add({
             id: event.id,
             title: event.title,
@@ -61,6 +62,7 @@ function CalendarDisplay() {
             description: event.description,
           });
         });
+        setEvents(response.data);
       } catch (error) {
         console.error("Error fetching events:", error);
       }
@@ -157,7 +159,6 @@ const handleDeleteEvent = async () => {
         prevEvents.filter((event) => event.id !== selectedEvent.id)
       );
       setSelectedEvent(null);
-      console.log("Event deleted:", selectedEvent.id);
     } catch (error) {
       console.error("Error deleting event:", error);
     }
@@ -182,21 +183,50 @@ return (
     <div style={{ marginTop: "20px" }}>
       <div>
         <h4>Select an Event</h4>
-        <select
-          value={selectedEvent?.id || ""}
-          onChange={(e) =>
-            handleEventSelection(Number(e.target.value))
-          }
+        <div
+          style={{
+            border: "1px solid #ccc",
+            padding: "10px",
+            width: "200px",
+            position: "relative",
+          }}
+          onClick={() => setIsDropdownOpen(!isDropdownOpen)}
         >
-          <option value="" disabled>
-            Select an event
-          </option>
-          {events.map((event) => (
-            <option key={event.id} value={event.id}>
-              {event.title}
-            </option>
-          ))}
-        </select>
+          {selectedEvent ? selectedEvent.title : "Select an event"}
+          {isDropdownOpen && (
+            <div
+              style={{
+                position: "absolute",
+                top: "100%",
+                left: 0,
+                right: 0,
+                background: "white",
+                border: "1px solid #ccc",
+                zIndex: 10,
+                maxHeight: "150px",
+                overflowY: "auto",
+              }}
+            >
+              {events.map((event) => (
+                <div
+                  key={event.id}
+                  style={{
+                    padding: "10px",
+                    cursor: "pointer",
+                    background:
+                      selectedEvent?.id === event.id ? "#f0f0f0" : "white",
+                  }}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    handleEventSelection(event.id);
+                  }}
+                >
+                  {event.title}
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
       </div>
       <DeleteButton onClick={handleDeleteEvent} />
       {selectedEvent && (
