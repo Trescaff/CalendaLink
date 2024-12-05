@@ -33,21 +33,7 @@ function Home() {
        + 
       </button>
 
-      <DeleteButton onClick={() => setShowDeletePopup(true)} />
-
-      {showDeletePopup && (
-        <div className="delete-popup">
-        <div className="popup-content">
-          <h3>Are you sure you want to delete this event?</h3>
-          <div className="button-container">
-            <button onClick={handleDeleteEvent}>Yes</button>
-            <button className="cancel" onClick={() => setShowDeletePopup(false)}>
-              No
-            </button>
-          </div>
-        </div>
-      </div>
-    )}
+      
 
       {isEventPopupOpen && (
         <EventPopup onClose={() => setIsEventPopupOpen(false)} onSaveSuccess={() => {}} />

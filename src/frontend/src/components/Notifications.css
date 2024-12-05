@@ -41,9 +41,10 @@
     display: flex;
     justify-content: space-between;
     gap: 1rem;
+    font-family: 'Poppins', sans-serif;
   }
   
-  .save-button {
+  .change-button {
     flex: 1;
     padding: 0.8rem;
     background: #4caf50;
@@ -54,9 +55,10 @@
     border-radius: 4px;
     cursor: pointer;
     transition: background 0.3s ease;
+    font-family: 'Poppins', sans-serif;
   }
   
-  .save-button:hover {
+  .change-button:hover {
     background: #45a049;
   }
   
@@ -71,6 +73,7 @@
     cursor: pointer;
     transition: background 0.3s ease;
     background: #909090;
+    font-family: 'Poppins', sans-serif;
   }
   
   .default-button:hover {

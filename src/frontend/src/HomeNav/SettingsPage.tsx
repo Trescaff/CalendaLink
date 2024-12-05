@@ -8,8 +8,23 @@ import "./SettingsPage.css";
 
 const SettingsPage: React.FC = () => {
   const [selectedOption, setSelectedOption] = useState("Profile");
-//   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isLogoutModalVisible, setIsLogoutModalVisible] = useState(false);
   const navigate = useNavigate();
+
+  const handleLogoutClick = () => {
+    setIsLogoutModalVisible(true); // Show the logout confirmation popup
+  };
+
+  const confirmLogout = () => {
+    console.log("Confirmed logout");
+    setIsLogoutModalVisible(false); // Close the popup
+    navigate("/"); // Redirect to the login page
+  };
+
+  const cancelLogout = () => {
+    console.log("Cancelled logout");
+    setIsLogoutModalVisible(false); // Close the popup without logging out
+  };
 
   const renderContent = () => {
     switch (selectedOption) {
@@ -18,40 +33,40 @@ const SettingsPage: React.FC = () => {
       case "Notifications":
         return <Notifications />;
       case "Logout":
-        navigate("/");
+        handleLogoutClick();
         return null;
       default:
         return <Account />;
     }
   };
 
-//   const handleLogoutConfirm = () => {
-//     navigate("/");
-//     setIsModalOpen(false); 
-//   };
-
-//   const handleLogoutCancel = () => {
-//     setIsModalOpen(false);
-//   };
 
   return (
     <div className="settings-page">
       <div className="settings-nav">
         <SettingsNav
           selectedOption={selectedOption}
-          onSelectOption={setSelectedOption}
-        />
+          onSelectOption={setSelectedOption} 
+          handleLogoutClick={handleLogoutClick}
+         />
       </div>
 
       <div className="settings-content">
         {renderContent()}
       </div>
 
-      {/* <ConfirmLogout
-        isOpen={isModalOpen}
-        onConfirm={handleLogoutConfirm}
-        onCancel={handleLogoutCancel}
-      /> */}
+      {isLogoutModalVisible && (
+        <div className="logout-modal">
+          <div className="modal-content">
+            <h3>Are you sure you want to log out?</h3>
+            <div className="button-container">
+              <button onClick={confirmLogout}>Yes</button>
+              <button className="cancel" onClick={cancelLogout}>No</button>
+            </div>
+          </div>
+        </div>
+      )}
+
     </div>
   );
 };

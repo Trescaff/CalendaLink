@@ -1,0 +1,53 @@
+.container {
+    position: relative;
+  }
+  
+.delete-event-button {
+    position: absolute;
+    top: 16.5px;
+    right: 361px;
+    padding: 12.5px 20px;
+    border: 1px solid #ccc;
+    background: white;
+    border-radius: 5px;
+    cursor: pointer;
+    font-family: 'Poppins', sans-serif;
+    z-index: 1000; /* Ensure it appears above other content */
+    font-size: 14px;
+}
+
+.delete-dropdown {
+    position: absolute;
+    top: 65px; /* Adjust depending on button size */
+    right: 246px;
+    width: 250px;
+    max-height: 200px; /* Height for 4 items */
+    overflow-y: auto;
+    background: white;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    z-index: 1000;
+  }
+  
+.delete-dropdown ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.delete-dropdown li {
+    padding: 10px;
+    border-bottom: 1px solid #f0f0f0;
+    cursor: pointer;
+    font-family: 'Poppins', sans-serif;
+}
+
+.delete-dropdown li:last-child {
+    border-bottom: none;
+}
+
+.delete-dropdown li:hover {
+    background-color: #f9f9f9;
+}
+  

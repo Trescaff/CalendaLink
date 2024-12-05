@@ -64,6 +64,7 @@
     border-radius: 4px;
     cursor: pointer;
     transition: background 0.3s ease;
+    font-family: 'Poppins', sans-serif;
   }
   
   .submit-button:hover {
@@ -81,6 +82,7 @@
     cursor: pointer;
     transition: background 0.3s ease;
     background: #909090; 
+    font-family: 'Poppins', sans-serif;
   }
   
   .clear-button:hover {

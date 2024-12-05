@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { NavBar } from "./NavBar";
 import BotNavBar from "../BottomNavBar/BotNavBar";
 import "./Notification.css";
