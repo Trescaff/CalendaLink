@@ -2,20 +2,23 @@ import "./Login.css";
 import { Link, useNavigate } from "react-router-dom";
 import { useState } from "react";
 import axios from "axios";
+import { useUser } from "./UserContext";
 
 function Login() {
 
-  const [username, setUsername] = useState("");
+  
   const [password, setPassword] = useState("");
   const [message, setMessage] = useState("");
   const navigate = useNavigate();
+  const { username, setUsername } = useUser();
 
   const handleLogin = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     try {
-      const response = await axios.post('http://localhost:5000/login', { username, password });
+      const response = await axios.post('https://localhost:5000/login', { username, password });
       setMessage(response.data.message);
       if(response.status === 200) {
+        setUsername(username);
         navigate("/Home", { state: { username } });
         }
       } catch (error) {
@@ -62,7 +65,6 @@ function Login() {
               Don't have an account? <Link to="/Register">Register</Link>
             </p>
           </div>
-          <Link to="/Home">Home</Link>
         </form>
       </div>
     </div>

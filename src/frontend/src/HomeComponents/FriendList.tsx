@@ -4,6 +4,8 @@ import { Link } from "react-router-dom";
 import axios from "axios";
 import "./FriendList.css";
 import ContactSelector from "./ContactSelector";
+import { useUser } from "../components/UserContext";
+import chillguy from "../assets/chill.jpg";
 
 type Friend = {
   username: string;
@@ -14,11 +16,12 @@ type Friend = {
 function FriendList() {
   const [isContactSelectorOpen, setIsContactSelectorOpen] = useState(false);
   const [friends, setFriends] = useState<Friend[]>([]);
+  const { username } = useUser();
 
   useEffect(() => {
     const fetchFriends = async () => {
       try {
-        const response = await axios.get("http://localhost:5000/user/Syuhada/friends");
+        const response = await axios.get(`https://localhost:5000/user/${username}/friends`);
         setFriends(response.data);
       } catch (error) {
         console.error("Error fetching friends:", error);
@@ -41,7 +44,11 @@ function FriendList() {
           friends.map((friend) => (
             <li key={friend.username} className="friend-item">
               <div className="avatar">
-                <span>{friend.fullName ? friend.fullName.charAt(0) : friend.username.charAt(0)}</span>
+              <img
+                  src={chillguy}
+                  alt="Profile Avatar"
+                  className="profile-avatar"
+                />
                 <div>
                   <p className="friend-name">{friend.fullName || friend.username}</p>
                   <p className="friend-id">{friend.phoneNumber}</p>

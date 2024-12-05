@@ -4,8 +4,8 @@ const bodyParser = require('body-parser');
 const cors = require('cors');
 const User = require('./models/userModel');
 const nodemailer = require('nodemailer');
-//const dotenv = require('dotenv').config();
-//const bcrypt = require('bcrypt');    //syunis - hashing dependency
+const fs = require('fs');
+const https = require('https');
 
 const app = express();
 const port = 5000;
@@ -34,7 +34,7 @@ app.post('/login', async (req, res) => {
 // POST: Register
 app.post('/register', async (req, res) => {
   try {
-    const { username, password } = req.body;
+    const { username, password, email } = req.body;
 
     // Check for existing user
     const existingUser = await User.findOne({ username });
@@ -44,7 +44,7 @@ app.post('/register', async (req, res) => {
     //const hashedPassword = await bcrypt.hash(password, 10);
 
     // Create user
-    const user = await User.create({ username, password });
+    const user = await User.create({ username, password, email });
     res.status(201).json({ message: 'User registered successfully', user });
   } catch (error) {
     console.error(error);
@@ -83,6 +83,32 @@ app.get('/calendar/:username', async (req, res) => {
     if (!user) return res.status(404).json({ message: 'User not found' });
 
     res.status(200).json({ calendar: user.calendar });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Server error' });
+  }
+});
+
+//app.get('/calendar/remove/:username/:eventId', async (req, res) => {
+app.delete('/user/:username/:eventId', async (req, res) => {
+  try {
+    const { username, eventId } = req.params;
+
+    // Find the user
+    const user = await User.findOne({ username });
+    if (!user) return res.status(404).json({ message: 'User not found' });
+
+    // Find the event index
+    const eventIndex = user.calendar.findIndex(event => event._id.toString() === eventId);
+    if (eventIndex === -1) return res.status(404).json({ message: 'Event not found' });
+
+    // Remove the event
+    user.calendar.splice(eventIndex, 1);
+
+    // Save the updated user document
+    await user.save();
+
+    res.json({ success: true, message: 'Event removed successfully' });
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: 'Server error' });
@@ -147,56 +173,90 @@ app.get('/user/:username/events', async (req, res) => {
   try {
     const user = await User.findOne({ username });
     if (user) {
-      res.status(200).send(user.calendar);
+     if (user.calendar.length === 0) {
+        res.status(406).send({ message: 'No events found' });
+      }else{
+        res.status(200).send(user.calendar);
+      }
     } else {
       res.status(404).send({ message: 'User not found' });
     }
   } catch (error) {
-    console.error('Error fetching events:', error);
+    console.error('Error fetching events backend:', error);
     res.status(500).send({ message: 'Server error' });
   }
 });
 
-//kena tambah 0.0.0.0 ke kat sini?
-app.listen(port, () => {
-  console.log(`Server running on http://localhost:${port}`);
+app.get('/user/:username/combined-events', async (req, res) => {
+  const { username } = req.params;
+  try {
+    const user = await User.findOne({ username });
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+
+    const connectedUsers = await User.find({ username: { $in: user.connectedUsers } });
+    const combinedEvents = connectedUsers.reduce((events, connectedUser) => {
+      return events.concat(connectedUser.calendar.map(event => ({
+        ...event.toObject(),
+        username: connectedUser.username // Add the username to each event
+      })));
+    }, []);
+
+    res.status(200).json(combinedEvents);
+  } catch (error) {
+    console.error('Error fetching combined events:', error);
+    res.status(500).json({ message: 'Server error' });
+  }
 });
 
-// //Email Noder
-//  const transporter = nodemailer.createTransport({
-//    service: 'gmail',
-//    host: "smtp.gmail.com",
-//    port: 465, //Port for SSL/TSL
-//    secure: true,
-//    auth: {
-//      user: "amirulhafiz.arman@gmail.com", //sender gmail address
-//      pass: "jghk uyst ccac cgzw",    // App password from gmail account
-//  },
-// });
+// GET: Retrieve upcoming events for a user
+app.get('/user/:username/upcoming-events', async (req, res) => {
+  const { username } = req.params;
+  try {
+    // Find the user
+    const user = await User.findOne({ username });
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' });
+    }
 
-//  const Option = {
-//      from: {
-//        name: 'Hafiz',
-//        address: "amirulhafiz.arman@gmail.com" 
-//    }, //sender adresss
-//    to:  "234@gmail.com",// list of yg dpt
-//    subject: "HELLO",            // subject line
-//    text: "BOy",                 // plain text body
-//    html: "<b>Hello World</b>",  // HTML body
-//   }
+    // Get combined events (user's events + connected users' events)
+    const connectedUsers = await User.find({ username: { $in: user.connectedUsers } });
+    const allEvents = [
+      ...user.calendar.map(event => ({ ...event.toObject(), username: user.username })),
+      ...connectedUsers.reduce((events, connectedUser) => {
+        return events.concat(connectedUser.calendar.map(event => ({
+          ...event.toObject(),
+          username: connectedUser.username,
+        })));
+      }, []),
+    ];
 
-//   const sendMail = async (transporter, Option) => {
-//     try {
-//       await transporter.sendMail(Option)
-//       console.log('Email has been sent');
-//     } catch (error) {
-//       console.error(error);
-//     }
-//   }
+    // Filter upcoming events
+    const today = new Date();
+    const upcomingEvents = allEvents.filter(event => {
+      const eventDate = new Date(event.date);
+      const eventDateTime = new Date(`${event.date}T${event.startTime}`);
+      return eventDateTime >= today; // Only future events
+    });
 
-//   sendMail(transporter, Option);
+    // Sort by date and time
+    upcomingEvents.sort((a, b) => {
+      const dateA = new Date(`${a.date}T${a.startTime}`);
+      const dateB = new Date(`${b.date}T${b.startTime}`);
+      return dateA - dateB;
+    });
 
- const transporter = nodemailer.createTransport({
+    res.status(200).json(upcomingEvents);
+  } catch (error) {
+    console.error('Error fetching upcoming events:', error);
+    res.status(500).json({ message: 'Server error' });
+  }
+});
+
+
+
+const transporter = nodemailer.createTransport({
    service: 'gmail',
    host: "smtp.gmail.com",
    port: 465, //Port for SSL/TSL
@@ -207,30 +267,132 @@ app.listen(port, () => {
  },
 });
 
-app.post("/send-email", async (req, res) => {
-  const {recipientEmail} = req.body;
+const verificationCodes = {};
 
-  if (!recipientEmail) {
-    return res.status(400).json({error: "Recipient email is required"});
+app.post("/Home", async (req, res) => {
+  const {email} = req.body;
+
+  if (!email) {
+    return res.status(400).json({ success: false, error: "Invalid Input"});
   }
 
+  const code = Math.floor(1000 + Math.random() * 9000).toString(); // Generate 4-digit code
+  verificationCodes[email] = code; // Store the code temporarily
+
   const emailOptions = {
-    from: {
-      name: "Hafiz",
-      address: "amirulhafiz.arman@gmail.com"
-    },
-    to: recipientEmail,
-    subject: "Hello",
-    text: "testing",
-    html: "TEST 1",
+    from: "amirulhafiz.arman@gmail.com",
+    to: email,
+    subject: "Verification Code",
+    text: `Your verification code is: ${code}`,
   };
 
   try {
     await transporter.sendMail(emailOptions);
-    console.log("Email sent successfully");
-    res.status(200).json({ message: "Sent successfully"});
+    res.json({ success: true});
   } catch (error) {
-    console.error("Error sending email:", error.message);
-    res.status(500).json({error: "Failed"});
+    res.status(500).json({ success: false, error: error.message });
   }
 });
+
+app.post("/verify-code", async (req, res) => {
+  const {username, email, code } = req.body;
+  console.log("Verification codes:", verificationCodes);
+  console.log("Email:", email);
+  console.log("Code:", code);
+  console.log("Verification code:", verificationCodes[email]);
+
+  if (verificationCodes[email] === code) {
+    delete verificationCodes[email]; // Remove the code after verification
+    console.log("Verification successful");
+
+    const user = await User.findOne({ email });
+    if (!user) {
+      return res.status(404).json({ success: false, error: "Email not found" });
+    }
+    
+    // Connect the user
+    const requestingUser = await User.findOne({ username }); // Replace with actual requesting username
+    if (!requestingUser) {
+      return res.status(404).json({ success: false, error: "Requesting user not found" });
+    }
+
+    if (!requestingUser.connectedUsers.includes(user.username)) {
+      requestingUser.connectedUsers.push(user.username);
+      await requestingUser.save();
+    }
+
+    if (!user.connectedUsers.includes(requestingUser.username)) {
+      user.connectedUsers.push(requestingUser.username);
+      await user.save();
+    }
+
+    res.json({ success: true, message: "User connected successfully", user: user.username });
+  } else {
+    res.status(400).json({ success: false, error: "Invalid code" });
+  }
+});
+
+//CalendarList
+// GET: Retrieve all calendars for a user
+// app.get('/AllCalendars', async (req, res) => {
+//   try {
+//     const calendars = await Calendar.find(); 
+//     res.status(200).json(calendars);
+//   } catch (error) {
+//     console.error(error);
+//     res.status(500).json({ message: 'Server error' });
+//   }
+// });
+
+// // POST: Add a new calendar
+// app.post('/AllCalendars', async (req, res) => {
+//   const { calendarName, imageSrc, userId } = req.body;
+//   try {
+//     const newCalendar = new Calendar({ calendarName, imageSrc, userId });
+//     await newCalendar.save();
+//     res.status(201).json(newCalendar);
+//   } catch (error) {
+//     console.error(error);
+//     res.status(500).json({ message: 'Server error' });
+//   }
+// });
+
+// // PUT: Update a calendar's name
+// app.put('/AllCalendars/:id', async (req, res) => {
+//   const { id } = req.params;
+//   const { calendarName, imageSrc } = req.body;
+
+//   try {
+//     const updatedCalendar = await Calendar.findByIdAndUpdate(id, { calendarName, imageSrc }, { new: true });
+//     if (!updatedCalendar) return res.status(404).json({ message: 'Calendar not found' });
+//     res.status(200).json(updatedCalendar);
+//   } catch (error) {
+//     console.error(error);
+//     res.status(500).json({ message: 'Server error' });
+//   }
+// });
+
+// // DELETE: Delete a calendar
+// app.delete('/AllCalendars/:id', async (req, res) => {
+//   const { id } = req.params;
+//   try {
+//     const deletedCalendar = await Calendar.findByIdAndDelete(id);
+//     if (!deletedCalendar) return res.status(404).json({ message: 'Calendar not found' });
+//     res.status(200).json({ message: 'Calendar deleted successfully' });
+//   } catch (error) {
+//     console.error(error);
+//     res.status(500).json({ message: 'Server error' });
+//   }
+// });
+
+const privateKey = fs.readFileSync('server.key', 'utf8');
+const certificate = fs.readFileSync('server.cert', 'utf8');
+const credentials = { key: privateKey, cert: certificate };
+
+// Create HTTPS server
+const httpsServer = https.createServer(credentials, app);
+
+httpsServer.listen(port, () => {
+  console.log(`Server running on https://localhost:${port}`);
+});
+

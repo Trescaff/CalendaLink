@@ -5,7 +5,7 @@
     background-color: #5c4cf3; 
     color: white; 
     text-align: center; 
-    padding: 12px 0; 
+    padding: 5px 0; 
     font-size: 20px; 
     font-family: 'Edu Australia', cursive;
     position: fixed; 
@@ -16,4 +16,9 @@
   .bot-nav-bar a {
     color: white; 
     text-decoration: none; 
+  }
+
+  .bot-nav-bar img {
+    width: 150px; 
+    height: auto; 
   }

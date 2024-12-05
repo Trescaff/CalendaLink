@@ -1,0 +1,55 @@
+
+.upcoming-container {
+    width: 300px;
+    background-color: #fff;
+    border-radius: 15px;
+    box-shadow: 0 8px 12px rgba(0, 0, 0, 0.2);
+    margin: 0em 1em 1em 0;
+    margin-left: 1em;
+    padding: 1em;
+}
+
+.upcomingEvent {
+    font-size: 1.5em;
+    margin-bottom: 1em;
+    color: #000;
+    text-align: center;
+}
+
+.upcoming-list {
+    list-style: none;
+    padding: 0;
+    margin: 1em 0;
+}
+
+.upcoming-list li {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.6em 1em;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    margin-bottom: 0.6em;
+    transition: background-color 0.3s ease;
+}
+
+.upcoming-list li:hover {
+    background-color: #f9f9f9;
+}
+
+.who {
+    font-weight: bold;
+    margin: 0;
+    font-size: 1em;
+}
+
+.when {
+    margin: 0;
+    font-size: 0.9em;
+    color: #555;
+}
+
+.all-item {
+    background-color: #f9f9f9;
+    border: 1px solid transparent;
+}

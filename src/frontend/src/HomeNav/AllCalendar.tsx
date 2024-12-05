@@ -6,7 +6,6 @@ function AllCalendar() {
   return (
     <div>
       <NavBar />
-      <h1>All Calendar</h1>
       <CalendarsList />
       <BotNavBar />
     </div>

@@ -4,17 +4,20 @@ import { IoSettingsOutline } from "react-icons/io5";
 import { IoPersonSharp } from "react-icons/io5";
 import axios from "axios";
 import "./ProfileBar.css";
+import { useUser } from "../components/UserContext";
+import DisplayPicture from "../assets/DisplayProfile.jpg";
 
 export const ProfileBar = () => {
 
   const [personalProfile, setPersonalProfile] = useState("");
   const [phoneNumber, setPhoneNumber] = useState("");
+  const { username } = useUser();
 
   useEffect(() => {
     const fetchUserData = async () => {
       try {
         //const username = 
-        const response = await axios.get("http://localhost:5000/user/afqhmni");
+        const response = await axios.get(`https://localhost:5000/user/${username}`);
         const user = response.data;
         setPersonalProfile(user.fullName || user.username);
         setPhoneNumber(user.phoneNumber);
@@ -31,7 +34,11 @@ export const ProfileBar = () => {
       <ul>
         <Link to="/PersonalProfile">
           <li>
-            <IoPersonSharp className="profile-avatar" />{" "}
+          <img
+              src={DisplayPicture}
+              alt="Profile Avatar"
+              className="profile-avatar"
+            />
             <div className="profile-details">
               <h3>{personalProfile}</h3>
               <p>{phoneNumber}</p>

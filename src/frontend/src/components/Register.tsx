@@ -5,15 +5,22 @@ import React, { useState } from "react";
 function Register() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const [email, setEmail] = useState("");
   const [message, setMessage] = useState("");
 
   const handleRegister = async (e: React.FormEvent) => {
     e.preventDefault(); // Prevent default form submission
 
-    try {
-      console.log("Submitting:", { username, password }); // Log the form data
+    if (!email.includes('@')) {
+      setMessage("Please enter a valid email address with'@'");
+      return; // Stop the form submission if the email is invalid
+    }
 
-      const response = await axios.post("http://localhost:5000/register", {
+    try {
+      console.log("Submitting:", { email, username, password }); // Log the form data
+
+      const response = await axios.post("https://localhost:5000/register", {
+        email,
         username,
         password,
       });
@@ -35,6 +42,15 @@ function Register() {
       <div className="wrapper">
         <h1>Register</h1>
         <form onSubmit={handleRegister}>
+          <div className="input-box">
+            <input
+              type="text"
+              placeholder="Email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              required
+            />
+          </div>
           <div className="input-box">
             <input
               type="text"

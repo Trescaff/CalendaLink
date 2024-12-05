@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import axios from "axios";
 import "./EventPopupCSS.css";
+import { useUser } from "../components/UserContext";
 
 interface EventPopupProps {
   onClose: () => void;
@@ -17,6 +18,8 @@ const EventPopup: React.FC<EventPopupProps> = ({ onClose, onSaveSuccess }) => {
   const [date, setDate] = useState("");
   const [loading, setLoading] = useState(false);
 
+  const { username } = useUser();
+
   const handleSave = async () => {
 
     const eventData = {
@@ -31,8 +34,8 @@ const EventPopup: React.FC<EventPopupProps> = ({ onClose, onSaveSuccess }) => {
 
 
     try {
-      const response = await axios.post("http://localhost:5000/calendar/add", {
-        username: 'afqhmni', // Use the dynamic username prop
+      const response = await axios.post("https://localhost:5000/calendar/add", {
+        username: username, // Use the dynamic username prop
         event: eventData,
       });
 
