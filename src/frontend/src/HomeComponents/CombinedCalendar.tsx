@@ -2,6 +2,7 @@ import BotNavBar from "../BottomNavBar/BotNavBar";
 import CalendarDisplay from "../Calendar/CalendarDisplay";
 import { NavBar } from "../HomeNav/NavBar";
 import Combined2 from "./Combined2";
+import UpcomingEvent from "./UpcomingEvent";
 import "./CombinedCalendar.css";
 
 function CombinedCalendar() {
@@ -9,9 +10,8 @@ function CombinedCalendar() {
     <div>
       <NavBar />
       <div className="combined-container">
-        <ul>
+        <ul><UpcomingEvent /></ul>
         <Combined2 />
-        </ul>
       </div>
       <BotNavBar />
     </div>

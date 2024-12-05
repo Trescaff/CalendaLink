@@ -14,7 +14,7 @@ function Combined2() {
   const { username } = useUser();
 
   type Event = {
-    id: number;
+    _id: number;
     title: string;
     description: string;
     startTime: string;
@@ -70,7 +70,7 @@ function Combined2() {
           console.log("Event color:", calendarId);
 
           eventsServicePlugin.add({
-            id: event.id,
+            id: event._id,
             title: `${event.title} (${event.username})`,
             start: `${formatDate(new Date(event.date))} ${event.startTime}`,
             end: `${formatDate(new Date(event.date))} ${event.endTime}`,
@@ -85,7 +85,7 @@ function Combined2() {
 
         response2.data.forEach((event: any, index: number) => {
             eventsServicePlugin.add({
-              id: event.id,
+              id: event._id,
               title: `${event.title} (${username})`,
               start: `${formatDate(new Date(event.date))} ${event.startTime}`,
               end: `${formatDate(new Date(event.date))} ${event.endTime}`,
@@ -100,88 +100,6 @@ function Combined2() {
     fetchEvents();
   }, [username]);
 
-        /*
-        response.data.forEach((event: Event) => {
-          // Set CSS variable for the username dynamically
-          const userColor =
-            colorMapping[event.username] || colorMapping.default;
-
-          document.documentElement.style.setProperty(
-            `--sx-color-primary-container`,
-            userColor
-          );
-
-          // Add event
-          eventsServicePlugin.add({
-            id: event.id,
-            title: `${event.title} (${event.username})`,
-            start: event.startTime,
-            end: event.endTime,
-            description: event.description,
-          });
-        });
-      } catch (error) {
-        console.error("Error fetching events:", error);
-      }
-    };
-
-    fetchEvents();
-  }, [username, eventsServicePlugin]);
-  */
-        
-
-        /*
-        response.data.forEach((event: any, index: number) => {
-          if (!users.includes(event.username)) {
-            users.push(event.username);
-          }
-          eventsServicePlugin.add({
-            id: event.id,
-            title: `${event.title} (${event.username})`,
-            start: `${formatDate(new Date(event.date))} ${event.startTime}`,
-            end: `${formatDate(new Date(event.date))} ${event.endTime}`,
-            description: event.description,
-            calendarId: users.indexOf(event.username).toString(),
-          });
-        });
-      
-        const response2 = await axios.get(`http://localhost:5000/user/${username}/events`);
-        console.log("Events fetched:", response2.data);
-
-        response2.data.forEach((event: any, index: number) => {
-            eventsServicePlugin.add({
-              id: event.id,
-              title: `${event.title} (${username})`,
-              start: `${formatDate(new Date(event.date))} ${event.startTime}`,
-              end: `${formatDate(new Date(event.date))} ${event.endTime}`,
-              description: event.description,
-            });
-          });
-
-      } catch (error) {
-        console.error("Error fetching events:", error);
-      }
-    };
-    
-    fetchEvents();
-  }, []);
-  */
-
-  const handleDeleteEvent = async () => {
-    if (selectedEvent) {
-      try {
-        eventsServicePlugin.remove(selectedEvent.id);
-        await axios.delete(`https://localhost:5000/calendar/remove/${username}/${selectedEvent.id}`);
-        setEvents((prevEvents) => prevEvents.filter((event) => event.id !== selectedEvent.id));
-        setSelectedEvent(null);
-        console.log("Event deleted:", selectedEvent.id);
-      } catch (error) {
-        console.error("Error deleting event:", error);
-      }
-    }
-  }; 
-
-  // Configure the calendar app
   const calendar = useCalendarApp({
     views: [createViewWeek(), createViewMonthGrid()],
     selectedDate: today,
@@ -265,16 +183,6 @@ function Combined2() {
       <ScheduleXCalendar calendarApp={calendar} />
       {selectedEvent && (
         <div style={modalStyle}>
-          <h3>Edit Event</h3>
-          <p>Are you sure you want to delete this event?</p>
-          <p>Title: {selectedEvent.title}</p>
-          <p>Description: {selectedEvent.description}</p>
-          <p>Start Time: {selectedEvent.startTime}</p>
-          <p>End Time: {selectedEvent.endTime}</p>
-          <DeleteButton onClick={handleDeleteEvent} />
-          <button type="button" onClick={() => setSelectedEvent(null)}>
-            Cancel
-          </button>
         </div>
       )}
     </div>
