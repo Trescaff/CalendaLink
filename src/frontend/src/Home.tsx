@@ -13,7 +13,6 @@ import DeleteButton from "./components/DeleteButton";
 function Home() {
   const [isEventPopupOpen, setIsEventPopupOpen] = useState(false);
   const [showDeletePopup, setShowDeletePopup] = useState(false);
-  const [selectedEventId, setSelectedEventId] = useState<number | null>(null);
 
   return (
     <div>

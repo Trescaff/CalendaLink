@@ -27,6 +27,7 @@ function Combined2() {
 
   const today = new Date().toISOString().split("T")[0];
   const eventsServicePlugin = React.useRef(createEventsServicePlugin()).current;
+  const eventModal = createEventModalPlugin();
 
   const formatDate = (isoDate: string | Date) => {
     const date = new Date(isoDate);
@@ -36,7 +37,6 @@ function Combined2() {
     return `${year}-${month}-${day}`;
   };
   
-  const [events, setEvents] = useState<Event[]>([]);
   const [selectedEvent, setSelectedEvent] = useState<Event | null>(null);
   const hasFetchedEvents = useRef(false);
   
@@ -49,15 +49,13 @@ function Combined2() {
 
       try {
         const response = await axios.get(`https://localhost:5000/user/${username}/combined-events`);
-        console.log("Combined events fetched:", response.data);
-
 
         const users: string[] = [username];
 
         // Clear existing events to avoid duplicates
         eventsServicePlugin.getAll().forEach((event) => {
-          eventsServicePlugin.remove(event.id);
-          console.log("Event removed:", event.id);
+          eventsServicePlugin.remove(event._id);
+          console.log("Event removed:", event._id);
         });
 
         response.data.forEach((event: Event, index: number) => {
@@ -65,9 +63,7 @@ function Combined2() {
             users.push(event.username);
           }
 
-          const calendarId = users.indexOf(event.username); // Get calendarId for this username
-          //const eventColor = colorMapping[calendarId]; //|| "#CCCCCC"; 
-          console.log("Event color:", calendarId);
+          const calendarId = users.indexOf(event.username); 
 
           eventsServicePlugin.add({
             id: event._id,
@@ -76,7 +72,6 @@ function Combined2() {
             end: `${formatDate(new Date(event.date))} ${event.endTime}`,
             description: event.description,
             calendarId: calendarId.toString(),
-            //backgroundColor: eventColor,
           });
         });
       
@@ -160,6 +155,7 @@ function Combined2() {
     plugins: [
       createEventModalPlugin(),
       eventsServicePlugin,
+      eventModal,
     ],
   });
 

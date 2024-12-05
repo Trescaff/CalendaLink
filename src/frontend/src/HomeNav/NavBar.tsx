@@ -35,7 +35,7 @@ export const NavBar = () => {
             {notifications.length > 0 ? (
               notifications.map((notification) => (
                 <div key={notification.id} className="notification-item">
-                  <div className="notification-content">
+                  <div className="notification-text">
                     <p>{notification.message}</p>
                     <span>{notification.time}</span>
                   </div>

@@ -40,6 +40,7 @@ function CalendarDisplay() {
   const [showDeletePopup, setShowDeletePopup] = useState(false);
   // Initialize the events service plugin (useRef to persist instance)
   const eventsServicePlugin = React.useRef(createEventsServicePlugin()).current;
+  const eventModal = createEventModalPlugin();
    
   useEffect(() => {
     // Fetch events from your API and add them to the events service
@@ -94,7 +95,7 @@ return (
     <ScheduleXCalendar calendarApp={useCalendarApp({
       views: [createViewWeek(), createViewMonthGrid()],
       selectedDate: today,
-      plugins: [eventsServicePlugin],
+      plugins: [eventsServicePlugin, eventModal],
     })} />
 
     {/* Event List */}
