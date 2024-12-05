@@ -1,14 +1,17 @@
 import React, { useState } from "react";
+import { useUser } from "./UserContext";
 import "./Account.css";
 
 const Account: React.FC = () => {
 
+  const { username, setUsername } = useUser();
+
   const initialState = {
     profilePic: null,
     bannerPic: null,
-    name: "Syuhada",
-    email: "syuhada@gmail",
-    username: "syushou",
+    name: "",
+    email: "",
+    username: username,
     password: "",
   };
 
@@ -16,7 +19,6 @@ const Account: React.FC = () => {
   const [bannerPic, setBannerPic] = useState<string | null>(initialState.bannerPic);
   const [name, setName] = useState(initialState.name);
   const [email, setEmail] = useState(initialState.email);
-  const [username, setUsername] = useState(initialState.username);
   const [password, setPassword] = useState(initialState.password);
 
   const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>, type: string) => {
@@ -93,7 +95,7 @@ const Account: React.FC = () => {
 
         <div className="button-group">
           <button type="button" onClick={handleClear} className="clear-button">Clear</button>
-          <button type="submit">Save Changes</button>
+          <button type="submit" className="submit-button">Save Changes</button>
         </div>
       </form>
     </div>

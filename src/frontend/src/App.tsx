@@ -12,7 +12,7 @@ import axios from "axios";
 import UserCard from "./components/UserCard";
 
 try{
-  const response = await axios.get('http://localhost:5000/');
+  const response = await axios.get('https://localhost:5000/');
   console.log(response.data);
 } catch (error) {
   console.error("what is happening", error);

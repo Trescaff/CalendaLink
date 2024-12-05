@@ -1,3 +1,5 @@
+
+/*
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@700&family=Roboto:wght@500&display=swap');
 *,
 *::before,
@@ -32,3 +34,155 @@
     right: 0;
     position: absolute;
 }
+    */
+
+    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@700&family=Roboto:wght@500&display=swap');
+    *,
+    *::before,
+    *::after {
+        box-sizing: border-box;
+        padding: 0;
+        margin: 0;
+    }
+
+    .navbar ul {
+        display: flex;
+        justify-content: start;
+        gap: 10px;
+        padding: 1em;
+        list-style: none;
+    }
+    
+    .navbar ul a{
+        color: rgb(0, 0, 0);
+        text-decoration: none;
+        font-family: 'Poppins', sans-serif;
+        font-size: 2em;
+    }
+
+    .notification-dropdown {
+        position: relative;
+        display: inline-block;
+    }
+    
+    .notification-icon {
+        cursor: pointer;
+        font-size: 2.5em;
+        color: black;
+        /*position: absolute;*/
+    }
+    
+    .dropdown-menu {
+        position: absolute;
+        top: 2.5em; /* Adjust based on your layout */
+        right: 0;
+        background-color: white;
+        border: 1px solid rgba(0, 0, 0, 0.2);
+        border-radius: 5px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        width: 300px;
+        padding: 1em;
+        z-index: 1000;
+    }
+    
+    .notification-item {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 0.8em;
+        border-bottom: 1px solid #ddd;
+    }
+
+    .notification-item:last-child {
+        border-bottom: none; 
+    }
+    
+    .notification-text {
+        flex: 1; /* Ensures the text takes up maximum space */
+        display: flex;
+        flex-direction: column;
+      }
+      
+      .notification-text p {
+        margin: 0; /* Removes default spacing */
+        font-weight: bold;
+        font-family: 'Roboto', sans-serif;
+      }
+      
+      .notification-text span {
+        font-size: 0.8em;
+        color: #888;
+      }
+
+    .notification-content {
+        display: flex;
+        flex-direction: column;
+        font-family: 'Roboto', sans-serif;
+        font-size: 0.9em;
+        color: #333;
+        flex-grow: 1;
+    }
+    
+    .notification-content span {
+        font-size: 0.8em;
+        color: #888;
+    }
+    
+    .close-button {
+        background: none;
+        border: none;
+        font-size: 1em;
+        color: #888;
+        cursor: pointer;
+        padding: 0.3em;
+    }
+    
+    .close-button:hover {
+        color: red;
+    }
+    
+    .no-notifications {
+        padding: 1em;
+        text-align: center;
+        font-family: 'Roboto', sans-serif;
+        color: #555;
+    }
+
+    .dropdown-menu p {
+        margin: 0;
+        padding: 0.5em 0;
+        font-family: 'Poppins', sans-serif;
+        font-size: 0.9em;
+        color: #555;
+    }
+    
+    .dropdown-menu a {
+        display: block;
+        text-decoration: none;
+        color: #007bff;
+        font-family: 'Poppins', sans-serif;
+        font-size: 0.9em;
+        margin-top: 0.5em;
+    }
+    
+    .dropdown-menu a:hover {
+        text-decoration: underline;
+    }
+
+    .navbar {
+        background-color: #ffffffe0;
+        display: flex;
+        justify-content: space-between; /* Ensure left and right sections are spaced */
+        padding: 0 1em; /* Add padding for the navbar */
+        align-items: center; /* Vertically align items */
+    }
+    
+    .right-upper-navbar {
+        display: flex;
+        align-items: center;
+        gap: 1em; /* Space between items */
+        margin-left: auto; /* Push items to the right */
+        position: relative; /* Ensures the dropdown is correctly positioned */
+    }
+    
+    

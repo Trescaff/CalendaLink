@@ -109,7 +109,7 @@ const Entries: React.FC = () => {
   useEffect(() => {
     const fetchCalendars = async () => {
       try {
-        const response = await axios.get("http://localhost:5000/AllCalendars");
+        const response = await axios.get("https://localhost:5000/AllCalendars");
         setEntries((prevEntries) => [...prevEntries, ...response.data]); // Merge the default calendars with the backend data
       } catch (error) {
         console.error("Error fetching calendars:", error);
@@ -130,7 +130,7 @@ const Entries: React.FC = () => {
 
       // Send the updated name to the backend
       const updatedCalendar = { ...entries[index], calendarName: newCalendarName };
-      axios.put(`http://localhost:5000/AllCalendars/${entries[index].id}`, updatedCalendar)
+      axios.put(`https://localhost:5000/AllCalendars/${entries[index].id}`, updatedCalendar)
         .then(() => {
           console.log("Calendar name updated successfully.");
         })
@@ -150,7 +150,7 @@ const Entries: React.FC = () => {
       setEntries(updatedEntries);
 
       // Send delete request to the backend
-      axios.delete(`http://localhost:5000/AllCalendars/${deletedCalendar.id}`)
+      axios.delete(`https://localhost:5000/AllCalendars/${deletedCalendar.id}`)
         .then(() => {
           console.log("Calendar deleted successfully.");
         })

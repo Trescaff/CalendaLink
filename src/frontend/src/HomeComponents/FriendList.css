@@ -32,7 +32,7 @@
     margin: 0em 1em 1em 0;
     margin-left: 1em;
     padding: 1em;
-    font-family: Arial, sans-serif;
+    /* font-family: Arial, sans-serif; */
 }
 
 .friend-list-container h1 {
@@ -67,7 +67,7 @@
 
 .search-container input::placeholder {
     color: #aaa;
-    font-style: italic;
+    /* font-style: italic; */
 }
 
 .search-icon {
@@ -149,6 +149,7 @@
     font-size: 1em;
     margin-top: 1em;
     transition: background-color 0.3s ease;
+    font-family: Poppins, sans-serif;
 }
 
 .add-button:hover {
@@ -157,4 +158,5 @@
 
 .add-button svg {
     margin-right: 0.5em;
+    
 }

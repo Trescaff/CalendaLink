@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useState} from "react";
 import "./DeleteButton.css";
 
 interface DeleteButtonProps {
@@ -6,6 +6,7 @@ interface DeleteButtonProps {
 }
 
 function DeleteButton({ onClick }: DeleteButtonProps) {
+
   return (
     <div>
       <button className="delete-button" onClick={onClick}>

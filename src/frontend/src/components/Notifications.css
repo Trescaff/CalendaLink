@@ -16,14 +16,14 @@
   }
   
   .noti-form-group label {
-    font-size: 1rem;
+    font-size: 1.4rem;
     display: flex;
     justify-content: space-between;
     width: 100%;
   }
   
   .toggle-icon {
-    font-size: 2rem;
+    font-size: 3rem;
     color: #4caf50;
     cursor: pointer;
     transition: color 0.3s ease;
@@ -43,7 +43,7 @@
     gap: 1rem;
   }
   
-  .button {
+  .save-button {
     flex: 1;
     padding: 0.8rem;
     background: #4caf50;
@@ -56,11 +56,20 @@
     transition: background 0.3s ease;
   }
   
-  .button:hover {
+  .save-button:hover {
     background: #45a049;
   }
   
   .default-button {
+    flex: 1;
+    padding: 0.8rem;
+    color: #fff;
+    font-size: 1rem;
+    font-weight: bold;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background 0.3s ease;
     background: #909090;
   }
   

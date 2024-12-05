@@ -139,7 +139,7 @@ const Notifications: React.FC = () => {
         <button onClick={handleResetToDefault} className="default-button">
           Default
         </button>
-        <button onClick={handleSave}>Save</button>
+        <button onClick={handleSave} className="save-button">Save</button>
       </div>
     </div>
   );

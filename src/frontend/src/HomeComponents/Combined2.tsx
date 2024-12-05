@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { ScheduleXCalendar, useCalendarApp } from "@schedule-x/react";
 import { createViewWeek, createViewMonthGrid } from "@schedule-x/calendar";
 import "@schedule-x/theme-default/dist/index.css";
@@ -25,17 +25,8 @@ function Combined2() {
     username: string;
   };
 
-  // Get today's date in the required format (YYYY-MM-DD)
   const today = new Date().toISOString().split("T")[0];
   const eventsServicePlugin = React.useRef(createEventsServicePlugin()).current;
-
-  // Step 1: Define colors for each calendarId
-  const colorMapping = [
-    "#FF5733", // calendarId 0 → Red
-    "#33FF57", // calendarId 1 → Green
-    "#3357FF", // calendarId 2 → Blue
-    "#FF33A1", // calendarId 3 → Pink
-  ];
 
   const formatDate = (isoDate: string | Date) => {
     const date = new Date(isoDate);
@@ -45,25 +36,28 @@ function Combined2() {
     return `${year}-${month}-${day}`;
   };
   
-  // return <ScheduleXCalendar calendarApp={calendar} />;
   const [events, setEvents] = useState<Event[]>([]);
   const [selectedEvent, setSelectedEvent] = useState<Event | null>(null);
-  // Initialize the events service plugin (useRef to persist instance)
-  //const eventsServicePlugin = React.useRef(createEventsServicePlugin()).current;
+  const hasFetchedEvents = useRef(false);
   
   useEffect(() => {
-    // Fetch events from your API and add them to the events service
     
     const fetchEvents = async () => {
+
+      if (hasFetchedEvents.current) return;
+      hasFetchedEvents.current = true;
+
       try {
-        const response = await axios.get(`http://localhost:5000/user/${username}/combined-events`);
+        const response = await axios.get(`https://localhost:5000/user/${username}/combined-events`);
         console.log("Combined events fetched:", response.data);
 
-        const users: string[] = [];
+
+        const users: string[] = [username];
 
         // Clear existing events to avoid duplicates
         eventsServicePlugin.getAll().forEach((event) => {
           eventsServicePlugin.remove(event.id);
+          console.log("Event removed:", event.id);
         });
 
         response.data.forEach((event: Event, index: number) => {
@@ -72,7 +66,8 @@ function Combined2() {
           }
 
           const calendarId = users.indexOf(event.username); // Get calendarId for this username
-          const eventColor = colorMapping[calendarId]; //|| "#CCCCCC"; 
+          //const eventColor = colorMapping[calendarId]; //|| "#CCCCCC"; 
+          console.log("Event color:", calendarId);
 
           eventsServicePlugin.add({
             id: event.id,
@@ -80,14 +75,12 @@ function Combined2() {
             start: `${formatDate(new Date(event.date))} ${event.startTime}`,
             end: `${formatDate(new Date(event.date))} ${event.endTime}`,
             description: event.description,
-            //className: userClass, // Dynamically assign the class
-            //calendarId: users.indexOf(event.username).toString(),
             calendarId: calendarId.toString(),
-            backgroundColor: eventColor,
+            //backgroundColor: eventColor,
           });
         });
       
-        const response2 = await axios.get(`http://localhost:5000/user/${username}/events`);
+        const response2 = await axios.get(`https://localhost:5000/user/${username}/events`);
         console.log("Events fetched:", response2.data);
 
         response2.data.forEach((event: any, index: number) => {
@@ -104,9 +97,8 @@ function Combined2() {
         console.error("Error fetching events:", error);
       }
     };
-    
     fetchEvents();
-  }, [username, eventsServicePlugin]);
+  }, [username]);
 
         /*
         response.data.forEach((event: Event) => {
@@ -179,7 +171,7 @@ function Combined2() {
     if (selectedEvent) {
       try {
         eventsServicePlugin.remove(selectedEvent.id);
-        await axios.delete(`http://localhost:5000/calendar/remove/${username}/${selectedEvent.id}`);
+        await axios.delete(`https://localhost:5000/calendar/remove/${username}/${selectedEvent.id}`);
         setEvents((prevEvents) => prevEvents.filter((event) => event.id !== selectedEvent.id));
         setSelectedEvent(null);
         console.log("Event deleted:", selectedEvent.id);
@@ -193,6 +185,60 @@ function Combined2() {
   const calendar = useCalendarApp({
     views: [createViewWeek(), createViewMonthGrid()],
     selectedDate: today,
+    calendars: {
+      0: { 
+        colorName: "user1",
+        lightColors: {
+          main: "#1c7df9",
+          container: "#d2e7ff",
+          onContainer: "#002859",
+        },
+        darkColors: {
+          main: "#c0dfff",
+          onContainer: "#dee6ff",
+          container: "#426aa2",
+        },
+       },
+      1: { 
+        colorName: "user2",
+        lightColors: {
+          main: "#c0dfff",
+          onContainer: "#dee6ff",
+          container: "#426aa2"
+        },
+        darkColors: {
+          main: "#ffc0c0",
+          onContainer: "#ffdede",
+          container: "#a24242",
+        },
+       },
+      2: { 
+        colorName: "user3",
+        lightColors: {
+          main: "#f91c1c",
+          container: "#ffd2d2",
+          onContainer: "#590000",
+        },
+        darkColors: {
+          main: "#fffcc0",
+          onContainer: "#ffdede",
+          container: "#a0a242",
+        },
+      },
+      3: { 
+        colorName: "user4",
+        lightColors: {
+          main: "#dcf91c",
+          container: "#f8ffd2",
+          onContainer: "#595900",
+        },
+        darkColors: {
+          main: "#fffcc0",
+          onContainer: "#ffdede",
+          container: "#a0a242",
+        },
+      },
+    },
     plugins: [
       createEventModalPlugin(),
       eventsServicePlugin,

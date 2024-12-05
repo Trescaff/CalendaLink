@@ -34,7 +34,7 @@ const EventPopup: React.FC<EventPopupProps> = ({ onClose, onSaveSuccess }) => {
 
 
     try {
-      const response = await axios.post("http://localhost:5000/calendar/add", {
+      const response = await axios.post("https://localhost:5000/calendar/add", {
         username: username, // Use the dynamic username prop
         event: eventData,
       });

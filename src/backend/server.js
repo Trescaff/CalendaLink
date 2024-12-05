@@ -4,9 +4,9 @@ const bodyParser = require('body-parser');
 const cors = require('cors');
 const User = require('./models/userModel');
 const nodemailer = require('nodemailer');
-//const dotenv = require('dotenv').config();
-//const bcrypt = require('bcrypt');    //syunis - hashing dependency
-//OI FAIZ
+const fs = require('fs');
+const https = require('https');
+
 const app = express();
 const port = 5000;
 
@@ -89,7 +89,8 @@ app.get('/calendar/:username', async (req, res) => {
   }
 });
 
-app.get('/calendar/remove/:username/:eventId', async (req, res) => {
+//app.get('/calendar/remove/:username/:eventId', async (req, res) => {
+app.delete('/user/:username/:eventId', async (req, res) => {
   try {
     const { username, eventId } = req.params;
 
@@ -208,41 +209,6 @@ app.get('/user/:username/combined-events', async (req, res) => {
     res.status(500).json({ message: 'Server error' });
   }
 });
-
-
-// //Email Noder
-//  const transporter = nodemailer.createTransport({
-//    service: 'gmail',
-//    host: "smtp.gmail.com",
-//    port: 465, //Port for SSL/TSL
-//    secure: true,
-//    auth: {
-//      user: "amirulhafiz.arman@gmail.com", //sender gmail address
-//      pass: "jghk uyst ccac cgzw",    // App password from gmail account
-//  },
-// });
-
-//  const Option = {
-//      from: {
-//        name: 'Hafiz',
-//        address: "amirulhafiz.arman@gmail.com" 
-//    }, //sender adresss
-//    to:  "amirulhafiz.arman@gmail.com",// list of yg dpt
-//    subject: "HELLO",            // subject line
-//    text: "BOy",                 // plain text body
-//    html: "<b>Hello World</b>",  // HTML body
-//   }
-
-//   const sendMail = async (transporter, Option) => {
-//     try {
-//       await transporter.sendMail(Option)
-//       console.log('Email has been sent');
-//     } catch (error) {
-//       console.error(error);
-//     }
-//   }
-
-//   sendMail(transporter, Option);
 
 const transporter = nodemailer.createTransport({
    service: 'gmail',
@@ -373,9 +339,14 @@ app.post("/verify-code", async (req, res) => {
 //   }
 // });
 
-app.listen(port, () => {
-  console.log(`Server running on http://localhost:${port}`);
+const privateKey = fs.readFileSync('server.key', 'utf8');
+const certificate = fs.readFileSync('server.cert', 'utf8');
+const credentials = { key: privateKey, cert: certificate };
+
+// Create HTTPS server
+const httpsServer = https.createServer(credentials, app);
+
+httpsServer.listen(port, () => {
+  console.log(`Server running on https://localhost:${port}`);
 });
-
-
 

@@ -15,7 +15,7 @@ function Login() {
   const handleLogin = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     try {
-      const response = await axios.post('http://localhost:5000/login', { username, password });
+      const response = await axios.post('https://localhost:5000/login', { username, password });
       setMessage(response.data.message);
       if(response.status === 200) {
         setUsername(username);
