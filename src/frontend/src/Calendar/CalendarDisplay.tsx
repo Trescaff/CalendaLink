@@ -55,6 +55,7 @@ function CalendarDisplay() {
         const response = await axios.get("http://localhost:5000/user/afqhmni/events");
         setEvents(response.data);
         console.log("Events fetched successfully:", events[0].date);
+        console.log("Events fetched successfully start:", events[0].startTime);
       } catch (error) {
         console.error("Error fetching events:", error);
       }
