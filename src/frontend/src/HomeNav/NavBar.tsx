@@ -85,6 +85,7 @@ interface Event {
   title: string;
   description: string;
   startTime: string;
+
   endTime: string;
   date: Date;
   username: string; // Indicates the owner of the event

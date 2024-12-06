@@ -16,6 +16,11 @@
     font-size: 14px;
 }
 
+.delete-event-button:hover {
+    background-color: #f9f9f9;
+    box-shadow: none;
+}
+
 .delete-dropdown {
     position: absolute;
     top: 65px; /* Adjust depending on button size */
@@ -28,7 +33,7 @@
     border-radius: 5px;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
     z-index: 1000;
-  }
+}
   
 .delete-dropdown ul {
     list-style: none;

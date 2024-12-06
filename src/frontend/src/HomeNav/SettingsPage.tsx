@@ -3,7 +3,6 @@ import { useState } from "react";
 import SettingsNav from "../components/SettingsNav.tsx";
 import Notifications from "../components/Notifications.tsx";
 import Account from "../components/Account.tsx";
-// import ConfirmLogout from "../components/ConfirmLogout.tsx";
 import "./SettingsPage.css";
 
 const SettingsPage: React.FC = () => {
@@ -12,18 +11,19 @@ const SettingsPage: React.FC = () => {
   const navigate = useNavigate();
 
   const handleLogoutClick = () => {
-    setIsLogoutModalVisible(true); // Show the logout confirmation popup
+    setIsLogoutModalVisible(true);
   };
 
   const confirmLogout = () => {
     console.log("Confirmed logout");
-    setIsLogoutModalVisible(false); // Close the popup
-    navigate("/"); // Redirect to the login page
+    setIsLogoutModalVisible(false);
+    navigate("/");
   };
 
   const cancelLogout = () => {
     console.log("Cancelled logout");
-    setIsLogoutModalVisible(false); // Close the popup without logging out
+    setIsLogoutModalVisible(false);
+    <Account />;
   };
 
   const renderContent = () => {
@@ -33,13 +33,11 @@ const SettingsPage: React.FC = () => {
       case "Notifications":
         return <Notifications />;
       case "Logout":
-        handleLogoutClick();
         return null;
       default:
         return <Account />;
     }
   };
-
 
   return (
     <div className="settings-page">
