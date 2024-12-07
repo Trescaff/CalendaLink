@@ -262,15 +262,15 @@ const transporter = nodemailer.createTransport({
    port: 465, //Port for SSL/TSL
    secure: true,
    auth: {
-     user: "amirulhafiz.arman@gmail.com", //sender gmail address
-     pass: "jghk uyst ccac cgzw",    // App password from gmail account
+     user: "calendalink@gmail.com", //sender gmail address
+     pass: "cgml tolo nfke vrbq",    // App password from gmail account
  },
 });
 
 const verificationCodes = {};
 
 app.post("/Home", async (req, res) => {
-  const {email} = req.body;
+  const {email, username} = req.body;
 
   if (!email) {
     return res.status(400).json({ success: false, error: "Invalid Input"});
@@ -280,10 +280,10 @@ app.post("/Home", async (req, res) => {
   verificationCodes[email] = code; // Store the code temporarily
 
   const emailOptions = {
-    from: "amirulhafiz.arman@gmail.com",
+    from: "calendalink@gmail.com",
     to: email,
-    subject: "Verification Code",
-    text: `Your verification code is: ${code}`,
+    subject: `Verification Code from ${username}`,
+    text: `${username} wants to add you as a friend,\nYour verification code is: ${code}`,
   };
 
   try {

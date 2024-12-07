@@ -32,6 +32,7 @@ const ContactSelector: React.FC<ContactSelectorProps> = ({ onClose }) => {
       try {
         const response = await axios.post("https://localhost:5000/Home", {
           email: newEmail,
+          username: username,
         });
 
         if (response.data.success) {
