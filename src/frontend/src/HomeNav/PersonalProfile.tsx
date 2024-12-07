@@ -39,13 +39,6 @@ function PersonalProfile() {
               <span className="info-label">Single ID:</span>
               <span className="info-value">syushou</span>
             </div>
-
-            {/* Logout Button */}
-            <div className="logout-container">
-              <Link to="/" className="logout-button">
-                Logout
-              </Link>
-            </div>
           </div>
         </div>
       </div>

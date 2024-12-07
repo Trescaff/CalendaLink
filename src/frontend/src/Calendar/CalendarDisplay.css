@@ -12,7 +12,7 @@
     border-radius: 5px;
     cursor: pointer;
     font-family: 'Poppins', sans-serif;
-    z-index: 1000; /* Ensure it appears above other content */
+    z-index: 1000; 
     font-size: 14px;
 }
 
@@ -23,10 +23,10 @@
 
 .delete-dropdown {
     position: absolute;
-    top: 65px; /* Adjust depending on button size */
+    top: 65px; 
     right: 246px;
     width: 250px;
-    max-height: 200px; /* Height for 4 items */
+    max-height: 200px;
     overflow-y: auto;
     background: white;
     border: 1px solid #ccc;
@@ -55,4 +55,26 @@
 .delete-dropdown li:hover {
     background-color: #f9f9f9;
 }
+
+.delete-popup {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: white;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.25);
+    z-index: 1000;
+}
   
+  .popup-content {
+    text-align: center;
+}
+  
+  .button-container {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 20px;
+}

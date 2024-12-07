@@ -96,10 +96,10 @@ const Entries: React.FC = () => {
     { calendarName: "Chew", imageSrc: pic, id: 2 },
     { calendarName: "Aekay", imageSrc: pic, id: 3 },
     { calendarName: "Apizzbu", imageSrc: pic, id: 4 },
-    { calendarName: "Mr Chan", imageSrc: pic, id: 5 },
-    { calendarName: "Bonjour, Je Mappelle Piju", imageSrc: pic, id: 6 },
+    { calendarName: "faiz", imageSrc: pic, id: 5 },
     { calendarName: "Syushou", imageSrc: pic, id: 7},
-    { calendarName: "BMO's Blue Elephant", imageSrc: pic, id: 8},
+    { calendarName: "BMO", imageSrc: pic, id: 8},
+    { calendarName: "Piju", imageSrc: pic, id: 6},
   ]);
 
 // const Entries: React.FC = () => {

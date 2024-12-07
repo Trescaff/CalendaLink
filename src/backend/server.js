@@ -369,59 +369,6 @@ app.post("/verify-code", async (req, res) => {
   }
 });
 
-//CalendarList
-// GET: Retrieve all calendars for a user
-// app.get('/AllCalendars', async (req, res) => {
-//   try {
-//     const calendars = await Calendar.find(); 
-//     res.status(200).json(calendars);
-//   } catch (error) {
-//     console.error(error);
-//     res.status(500).json({ message: 'Server error' });
-//   }
-// });
-
-// // POST: Add a new calendar
-// app.post('/AllCalendars', async (req, res) => {
-//   const { calendarName, imageSrc, userId } = req.body;
-//   try {
-//     const newCalendar = new Calendar({ calendarName, imageSrc, userId });
-//     await newCalendar.save();
-//     res.status(201).json(newCalendar);
-//   } catch (error) {
-//     console.error(error);
-//     res.status(500).json({ message: 'Server error' });
-//   }
-// });
-
-// // PUT: Update a calendar's name
-// app.put('/AllCalendars/:id', async (req, res) => {
-//   const { id } = req.params;
-//   const { calendarName, imageSrc } = req.body;
-
-//   try {
-//     const updatedCalendar = await Calendar.findByIdAndUpdate(id, { calendarName, imageSrc }, { new: true });
-//     if (!updatedCalendar) return res.status(404).json({ message: 'Calendar not found' });
-//     res.status(200).json(updatedCalendar);
-//   } catch (error) {
-//     console.error(error);
-//     res.status(500).json({ message: 'Server error' });
-//   }
-// });
-
-// // DELETE: Delete a calendar
-// app.delete('/AllCalendars/:id', async (req, res) => {
-//   const { id } = req.params;
-//   try {
-//     const deletedCalendar = await Calendar.findByIdAndDelete(id);
-//     if (!deletedCalendar) return res.status(404).json({ message: 'Calendar not found' });
-//     res.status(200).json({ message: 'Calendar deleted successfully' });
-//   } catch (error) {
-//     console.error(error);
-//     res.status(500).json({ message: 'Server error' });
-//   }
-// });
-
 const privateKey = fs.readFileSync('server.key', 'utf8');
 const certificate = fs.readFileSync('server.cert', 'utf8');
 const credentials = { key: privateKey, cert: certificate };

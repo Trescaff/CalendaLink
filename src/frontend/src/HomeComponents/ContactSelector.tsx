@@ -87,21 +87,6 @@ const ContactSelector: React.FC<ContactSelectorProps> = ({ onClose }) => {
     }
   };
 
-
-  // const handleStatusChange = (index: number) => {
-  //   setContacts((prev) =>
-  //     prev.map((contact, i) =>
-  //       i === index
-  //         ? { ...contact, status: contact.status === "Add" ? "Added" : "Add" }
-  //         : contact
-  //     )
-  //   );
-  // };
-
-  // const filteredContacts = contacts.filter((contact) =>
-  //   contact.name.toLowerCase().includes(searchQuery.toLowerCase())
-  // );
-
   return (
     <div 
       style={{
@@ -134,49 +119,6 @@ const ContactSelector: React.FC<ContactSelectorProps> = ({ onClose }) => {
         &times;
       </button>
 
-      {/* Tabs */}
-      {/* <div
-        style={{
-          display: "flex",
-          borderBottom: "1px solid #e0e0e0",
-          marginBottom: "20px",
-        }}
-      >
-        <button
-          onClick={() => setActiveTab("Email")}
-          style={{
-            flex: 1,
-            padding: "10px",
-            border: "none",
-            borderBottom: activeTab === "Email" ? "3px solid #4F46E5" : "none",
-            background: "none",
-            color: activeTab === "Email" ? "#4F46E5" : "#999",
-            fontWeight: activeTab === "Email" ? "bold" : "normal",
-            cursor: "pointer",
-          }}
-        >
-          Email
-        </button>
-        <button
-          onClick={() => setActiveTab("Contact")}
-          style={{
-            flex: 1,
-            padding: "10px",
-            border: "none",
-            borderBottom:
-              activeTab === "Contact" ? "3px solid #4F46E5" : "none",
-            background: "none",
-            color: activeTab === "Contact" ? "#4F46E5" : "#999",
-            fontWeight: activeTab === "Contact" ? "bold" : "normal",
-            cursor: "pointer",
-          }}
-        >
-          Contact
-        </button>
-      </div> */}
-
-      {/* Email Tab */}
-      {/* {activeTab === "Email" && step === 1 ? ( */}
         <div
           style={{
             display: "flex",
@@ -210,7 +152,6 @@ const ContactSelector: React.FC<ContactSelectorProps> = ({ onClose }) => {
                 marginBottom: "10px",
                 textAlign: "center",
                 fontFamily: "Poppins, sans-serif",
-                //marginRight: "10px", 
               }}
             />
             <button
@@ -270,105 +211,6 @@ const ContactSelector: React.FC<ContactSelectorProps> = ({ onClose }) => {
               Verify Code</button>
           </div>
         </div>
-      {/* ):  */}
-      {/* (
-        <div>
-          <input
-            type="text"
-            value={verificationCode}
-            onChange={(e) => setVerificationCode(e.target.value)}
-            placeholder="Enter verification code"
-            style={{
-              width: "80%",
-              padding: "10px",
-              borderRadius: "5px",
-              border: "1px solid #e0e0e0",
-              marginBottom: "10px",
-              textAlign: "center",
-            }}
-          />
-          <button onClick={handleCodeSubmit}
-          style={{
-            padding: "10px 20px",
-            borderRadius: "5px",
-            border: "none",
-            backgroundColor: "#4F46E5",
-            color: "white",
-            cursor: "pointer",
-            fontWeight: "bold",
-            fontSize: "16px",
-            textAlign: "center",
-          }}>
-            Verify Code</button>
-        </div>
-      )} */}
-
-      {/* Contact Tab */}
-      {/* {activeTab === "Contact" && (
-        <div>
-          <input
-            type="text"
-            placeholder="Search contacts..."
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-            style={{
-              width: "100%",
-              padding: "10px",
-              borderRadius: "5px",
-              border: "1px solid #e0e0e0",
-              marginBottom: "20px",
-            }}
-          />
-          {filteredContacts.map((contact, index) => (
-            <div
-              key={index}
-              style={{
-                display: "flex",
-                justifyContent: "space-between",
-                alignItems: "center",
-                padding: "10px 0",
-                borderBottom: "1px solid #e0e0e0",
-              }}
-            >
-              <div style={{ display: "flex", alignItems: "center" }}>
-                <div
-                  style={{
-                    width: "40px",
-                    height: "40px",
-                    borderRadius: "50%",
-                    border: `2px solid ${
-                      contact.status === "Added" ? "#4F46E5" : "#E11D48"
-                    }`,
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                    marginRight: "10px",
-                    fontWeight: "bold",
-                    color: contact.status === "Added" ? "#4F46E5" : "#E11D48",
-                  }}
-                >
-                  {contact.name[0]}
-                </div>
-                <span>{contact.name}</span>
-              </div>
-              <button
-                onClick={() => handleStatusChange(index)}
-                style={{
-                  padding: "5px 10px",
-                  borderRadius: "5px",
-                  border: "none",
-                  backgroundColor:
-                    contact.status === "Added" ? "#4F46E5" : "#e0e0e0",
-                  color: contact.status === "Added" ? "white" : "#333",
-                  cursor: "pointer",
-                }}
-              >
-                {contact.status}
-              </button>
-            </div>
-          ))}
-        </div>
-      )} */}
     </div>
   );
 };
