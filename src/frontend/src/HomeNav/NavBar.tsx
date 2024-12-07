@@ -26,9 +26,9 @@ export const NavBar = () => {
     setDropdownOpen((prev) => !prev);
   };
 
-  const dismissNotification = (id: number) => {
-    setNotifications((prev) => prev.filter((notif) => notif._id !== id));
-  };
+  // const dismissNotification = (id: number) => {
+  //   setNotifications((prev) => prev.filter((notif) => notif._id !== id));
+  // };
 
   useEffect(() => {
     const fetchNotifications = async () => {
@@ -119,12 +119,12 @@ export const NavBar = () => {
                         )}
                       </p>
                     </div>
-                    <button
+                    {/* <button
                       onClick={() => dismissNotification(notification._id)}
                       className="close-button"
                     >
                       X
-                    </button>
+                    </button> */}
                   </div>
                 ))
               ) : (
