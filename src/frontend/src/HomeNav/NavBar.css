@@ -25,8 +25,7 @@
     }
 
     .notification-dropdown {
-        position: relative;
-        display: inline-block;
+        overflow: visible;
     }
     
     .notification-icon {
@@ -36,14 +35,16 @@
     }
     
     .dropdown-menu {
-        width: 100px;
-        max-height: 500px; 
+        position: absolute;
+        max-height: 400px; 
+        max-width: 700px !important;;
         overflow-y: auto; 
-        background-color: white;
+        overflow-x: hidden;
         border: 1px solid rgba(0, 0, 0, 0.2);
         border-radius: 8px;
         box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
         padding: 10px;
+        min-width: 400px; 
     }
     
     .notification-item {
@@ -91,22 +92,13 @@
         color: #888;
     }
     
-    .close-button-1{
+    .close-button{
         background: none;
         border: none;
         font-size: 0.9em;
         color: #888;
         cursor: pointer;
         padding: 0.3em;
-    }
-    .close-button-2{
-        background: none;
-        border: none;
-        font-size: 0.9em;
-        color: #888;
-        cursor: pointer;
-        padding: 0.3em;
-        margin-top: 5px; 
     }
     
     .close-button:hover {
@@ -121,6 +113,8 @@
     }
 
     .dropdown-menu p {
+        width: 400px;
+
         margin: 0;
         padding: 0.5em 0;
         font-family: 'Poppins', sans-serif;

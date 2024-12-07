@@ -254,6 +254,43 @@ app.get('/user/:username/upcoming-events', async (req, res) => {
   }
 });
 
+app.post('/user/:username/notifications', async (req, res) => {
+  const { username } = req.params;
+  const { notificationSettings } = req.body;
+
+  try {
+    const user = await User.findOne({ username });
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+
+    user.notificationSettings = notificationSettings;
+    await user.save();
+
+    res.status(200).json({ message: 'Notification settings updated successfully' });
+  } catch (error) {
+    console.error('Error updating notification settings:', error);
+    res.status(500).json({ message: 'Server error' });
+  }
+});
+
+app.get('/user/:username/notifications', async (req, res) => {
+  const { username } = req.params;
+
+  try {
+    const user = await User.findOne({ username });
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+
+    res.status(200).json(user.notificationSettings);
+  } catch (error) {
+    console.error('Error fetching notification settings:', error);
+    res.status(500).json({ message: 'Server error' });
+  }
+});
+
+
 
 
 const transporter = nodemailer.createTransport({
