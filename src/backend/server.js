@@ -200,7 +200,9 @@ app.get('/user/:username/combined-events', async (req, res) => {
       })));
     }, []);
 
-    res.status(200).json(combinedEvents);
+    const filteredEvents = combinedEvents.filter(event => event.category !== 'Me');
+
+    res.status(200).json(filteredEvents);
   } catch (error) {
     console.error('Error fetching combined events:', error);
     res.status(500).json({ message: 'Server error' });

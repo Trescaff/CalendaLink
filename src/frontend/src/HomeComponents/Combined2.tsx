@@ -56,6 +56,8 @@ function Combined2() {
           console.log("Event removed:", event._id);
         });
 
+        console.log("Events fetched:", response.data);
+
         response.data.forEach((event: Event, index: number) => {
           if (!users.includes(event.username)) {
             users.push(event.username);
