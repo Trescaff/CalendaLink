@@ -1,6 +1,8 @@
 # CalendaLink
 
-- an app that help in connecting different calendars into one. 
+- an app that help in connecting different calendars into one.
+- Frontend - React
+- Backend - MongoDB, Express.js, Node.js,
 
 ## Guide for running the app
 
