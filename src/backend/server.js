@@ -18,9 +18,6 @@ mongoose.connect('mongodb+srv://faizchan23:OqWnwzVYKtEkN1ws@calendalink.ph2sv.mo
 // POST: Login
 app.post('/login', async (req, res) => {
   const { username, password } = req.body;
-  //Syunis 
-  //const user = await User.findOne({ username });    //untuk hash
-  //const user = users.find(u => u.username === username && u.password === password);
   const user = await User.findOne({username, password});
 
   if (user) {

@@ -1,7 +1,6 @@
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { IoSettingsOutline } from "react-icons/io5";
-import { IoPersonSharp } from "react-icons/io5";
 import axios from "axios";
 import "./ProfileBar.css";
 import { useUser } from "../components/UserContext";

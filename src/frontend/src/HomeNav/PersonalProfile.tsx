@@ -1,4 +1,3 @@
-import { Link } from "react-router-dom";
 import BotNavBar from "../BottomNavBar/BotNavBar";
 import { NavBar } from "./NavBar";
 import "./PersonalProfile.css";

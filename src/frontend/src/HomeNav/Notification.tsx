@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useState } from "react";
 import { NavBar } from "./NavBar";
 import BotNavBar from "../BottomNavBar/BotNavBar";
 import "./Notification.css";
@@ -38,15 +38,4 @@ const Notification = () => {
   );
 };
 
-/*
-function Notification() {
-  return (
-    <div>
-      <NavBar />
-      <h1>Notification</h1>
-      <BotNavBar />
-    </div>
-  );
-}
-*/
 export default Notification;
