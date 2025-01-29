@@ -8,9 +8,18 @@ const User = require('./models/userModel');
 const nodemailer = require('nodemailer');
 const fs = require('fs');
 const https = require('https');
+const rateLimit = require('express-rate-limit');
 
 const app = express();
 const port = process.env.PORT || 5000;
+
+const limiter = rateLimit({
+  windowMs: 15 * 60 * 1000, // 15 minutes
+  max: 100, // limit each IP to 100 requests per windowMs
+  message: 'Too many requests from this IP, please try again after 15 minutes'
+});
+
+app.use(limiter);
 
 app.use(bodyParser.json());
 app.use(cors());
