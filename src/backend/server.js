@@ -1,3 +1,5 @@
+require('dotenv').config();
+
 const express = require('express');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
@@ -8,12 +10,12 @@ const fs = require('fs');
 const https = require('https');
 
 const app = express();
-const port = 5000;
+const port = process.env.PORT || 5000;
 
 app.use(bodyParser.json());
 app.use(cors());
 
-mongoose.connect('mongodb+srv://faizchan23:OqWnwzVYKtEkN1ws@calendalink.ph2sv.mongodb.net/?retryWrites=true&w=majority&appName=calendalink', {});
+mongoose.connect(process.env.DATABASE_URL, {});
 
 // POST: Login
 app.post('/login', async (req, res) => {
@@ -289,17 +291,14 @@ app.get('/user/:username/notifications', async (req, res) => {
   }
 });
 
-
-
-
 const transporter = nodemailer.createTransport({
    service: 'gmail',
    host: "smtp.gmail.com",
    port: 465, //Port for SSL/TSL
    secure: true,
    auth: {
-     user: "calendalink@gmail.com", //sender gmail address
-     pass: "cgml tolo nfke vrbq",    // App password from gmail account
+     user: process.env.MAIL_USERNAME, //sender gmail address
+     pass: process.env.MAIL_PASSWORD,    // App password from gmail account
  },
 });
 
@@ -316,7 +315,7 @@ app.post("/Home", async (req, res) => {
   verificationCodes[email] = code; // Store the code temporarily
 
   const emailOptions = {
-    from: "calendalink@gmail.com",
+    from: process.env.MAIL_USERNAME,
     to: email,
     subject: `Verification Code from ${username}`,
     text: `${username} wants to add you as a friend,\nYour verification code is: ${code}`,
